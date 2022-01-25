@@ -4,6 +4,7 @@
   "description": "The Zeroed Books web app.",
   "main": "index.js",
   "scripts": {
+    "build": "ts-node ./build.ts",
     "start": "ts-node ./build.ts serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
