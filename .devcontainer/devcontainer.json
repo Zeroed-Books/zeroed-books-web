@@ -9,13 +9,20 @@
 
   // Set *default* container specific settings.json values on container create.
   "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+
     // Disable automatic port forwarding because we expose the development
     // server through NGINX.
     "remote.autoForwardPorts": false
   },
 
   // Add the IDs of extensions you want installed when the container is created.
-  "extensions": ["dbaeumer.vscode-eslint", "patbenatar.advanced-new-file"],
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "patbenatar.advanced-new-file"
+  ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
@@ -25,6 +32,7 @@
 
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "node",
+
   "features": {
     "github-cli": "latest"
   }
