@@ -1,20 +1,20 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import useAuthStatus from './useAuthStatus';
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import useAuthStatus from "./useAuthStatus";
 
 interface Props {
-    children: JSX.Element
+  children: JSX.Element;
 }
 
 const RequireAuth: React.FC<Props> = ({ children }) => {
-    const auth = useAuthStatus();
-    const location = useLocation();
+  const auth = useAuthStatus();
+  const location = useLocation();
 
-    if (!auth.isAuthenticated) {
-        return <Navigate to="/login" state={{ from: location }} replace={true} />;
-    }
+  if (!auth.isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace={true} />;
+  }
 
-    return children;
-}
+  return children;
+};
 
 export default RequireAuth;
