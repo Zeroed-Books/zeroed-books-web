@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+fileList=$(git diff --diff-filter=d --cached --name-only)
+
+npx prettier --check --ignore-unknown "${fileList}"
