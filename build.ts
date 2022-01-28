@@ -80,6 +80,9 @@ const serve = async (): Promise<void> => {
             },
             {
                 bundle: true,
+                define: {
+                    "process.env.API_ROOT": `"${process.env.API_ROOT}"`,
+                },
                 entryPoints: ENTRY_POINTS,
                 logLevel: "info",
                 outdir: `${PUBLIC_DIR}/${BUNDLE_DIR}`,

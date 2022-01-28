@@ -4,6 +4,8 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import LoginPage from './authentication/LoginPage';
 import NotFound from './NotFound';
 import RequireAuth from './authentication/RequireAuth';
+import { AuthProvider } from './authentication/useAuthStatus';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const Protected = () => <Title order={1}>Protected</Title>;
 
@@ -23,11 +25,17 @@ const AppRoutes = () => (
     </Routes>
 );
 
+const queryClient = new QueryClient();
+
 const App = () => (
     <BrowserRouter>
-        <MantineProvider theme={{ primaryColor: "green"}}>
-            <AppRoutes />
-        </MantineProvider>
+        <QueryClientProvider client={queryClient}>
+            <MantineProvider theme={{ primaryColor: "green"}}>
+                <AuthProvider>
+                    <AppRoutes />
+                </AuthProvider>
+            </MantineProvider>
+        </QueryClientProvider>
     </BrowserRouter>
 );
 

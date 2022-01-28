@@ -2,11 +2,7 @@ import React from 'react';
 import { Button, LoadingOverlay, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import { EnvelopeClosedIcon, LockClosedIcon } from '@modulz/radix-icons';
-
-interface Credentials {
-    email: string;
-    password: string;
-}
+import { Credentials } from './api';
 
 interface Props {
     loading: boolean;
