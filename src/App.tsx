@@ -1,6 +1,13 @@
 import React from "react";
-import { AppShell, MantineProvider, Title } from "@mantine/core";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import {
+  Anchor,
+  AppShell,
+  Group,
+  Header,
+  MantineProvider,
+  Title,
+} from "@mantine/core";
+import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import LoginPage from "./authentication/LoginPage";
 import NotFound from "./NotFound";
 import RequireAuth from "./authentication/RequireAuth";
@@ -9,7 +16,24 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import TransactionListPage from "./ledger/transactions/TransactionListPage";
 
 const AppLayout = () => (
-  <AppShell header={<Title order={3}>Zeroed Books</Title>}>
+  <AppShell
+    header={
+      <Header
+        height={60}
+        styles={(theme) => ({
+          root: { background: theme.colors[theme.primaryColor][5] },
+        })}
+      >
+        <Group style={{ height: "100%", justifyItems: "center" }}>
+          <Anchor component={Link} to="/">
+            <Title order={3} ml="lg">
+              Zeroed Books
+            </Title>
+          </Anchor>
+        </Group>
+      </Header>
+    }
+  >
     <Outlet />
   </AppShell>
 );
