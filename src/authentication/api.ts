@@ -1,7 +1,7 @@
-import axios from "axios";
+import apiClient from "../apiClient";
 import { API_ROOT } from "../settings";
 
-axios.defaults.withCredentials = true;
+const client = apiClient();
 
 export interface Credentials {
   email: string;
@@ -13,7 +13,7 @@ export const createCookieSession = async (
 ): Promise<void> => {
   const url = `${API_ROOT}/authentication/cookie-sessions`;
 
-  await axios.post<void>(url, credentials);
+  await client.post<void>(url, credentials);
 };
 
 export interface AuthStatus {
@@ -22,7 +22,7 @@ export interface AuthStatus {
 
 export const getAuthStatus = async (): Promise<AuthStatus> => {
   const url = `${API_ROOT}/authentication/me`;
-  const response = await axios.get<AuthStatus>(url);
+  const response = await client.get<AuthStatus>(url);
 
   return response.data;
 };

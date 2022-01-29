@@ -6,8 +6,7 @@ import NotFound from "./NotFound";
 import RequireAuth from "./authentication/RequireAuth";
 import { AuthProvider } from "./authentication/useAuthStatus";
 import { QueryClient, QueryClientProvider } from "react-query";
-
-const Protected = () => <Title order={1}>Protected</Title>;
+import TransactionListPage from "./ledger/transactions/TransactionListPage";
 
 const AppLayout = () => (
   <AppShell header={<Title order={3}>Zeroed Books</Title>}>
@@ -22,7 +21,7 @@ const AppRoutes = () => (
         index
         element={
           <RequireAuth>
-            <Protected />
+            <TransactionListPage />
           </RequireAuth>
         }
       />
