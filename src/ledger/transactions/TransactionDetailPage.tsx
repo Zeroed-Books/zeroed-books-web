@@ -6,6 +6,7 @@ import {
   Container,
   Group,
   Loader,
+  Paper,
   Skeleton,
   Text,
   Title,
@@ -15,6 +16,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import { getTransaction, Transaction } from "./api";
+import DeleteTransactionButton from "./DeleteTransactionButton";
 import { transactionKeys } from "./queries";
 
 interface TransactionDetailDisplayProps {
@@ -36,6 +38,10 @@ const TransactionDetailDisplay: React.FC<TransactionDetailDisplayProps> = ({
           {parsedDate.format("MMMM D, YYYY")}
         </Text>
       </Title>
+
+      <Paper mb="xl" padding="md" shadow="xs">
+        <DeleteTransactionButton transaction={transaction} />
+      </Paper>
 
       {transaction.entries.map((entry) => (
         <Group
