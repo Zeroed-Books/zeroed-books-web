@@ -51,7 +51,7 @@ const NewTransactionForm = () => {
 
   return (
     <TransactionForm
-      error={mutation.error && createErrorResponse(mutation.error)}
+      error={mutation.error ? createErrorResponse(mutation.error) : undefined}
       formData={form}
       loading={mutation.isLoading}
       onSubmit={mutation.mutate}

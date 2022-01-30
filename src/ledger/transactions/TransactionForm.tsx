@@ -70,7 +70,7 @@ const EntryForm: React.FC<EntryFormProps> = ({
         onChange={(e) =>
           onChange(index, {
             ...entry,
-            amount: { ...entry.amount, value: e.currentTarget.value },
+            amount: { currency: "USD", value: e.currentTarget.value },
           })
         }
         value={entry.amount?.value ?? ""}
@@ -94,7 +94,7 @@ const TransactionForm: React.FC<Props> = ({
         entries: data.entries
           .filter((entry) => entry.account !== "")
           .map((entry) => {
-            if (entry.amount.value === "") {
+            if (entry.amount?.value === "") {
               return {
                 account: entry.account,
               };

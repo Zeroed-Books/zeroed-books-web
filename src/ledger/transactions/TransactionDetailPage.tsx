@@ -65,9 +65,11 @@ const TransactionDetailDisplay: React.FC<TransactionDetailDisplayProps> = ({
 
 const TransactionDetailPage = () => {
   const { transactionID } = useParams();
-  const query = useQuery(transactionKeys.detail(transactionID), async () =>
-    getTransaction(transactionID)
-  );
+  const query = useQuery(transactionKeys.detail(transactionID), async () => {
+    if (transactionID) {
+      return await getTransaction(transactionID);
+    }
+  });
 
   return (
     <Container>
@@ -91,9 +93,9 @@ const TransactionDetailPage = () => {
         <Center>
           <Loader size="xl" />
         </Center>
-      ) : (
+      ) : query.data ? (
         <TransactionDetailDisplay transaction={query.data} />
-      )}
+      ) : null}
     </Container>
   );
 };
