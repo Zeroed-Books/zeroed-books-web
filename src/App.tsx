@@ -13,7 +13,8 @@ import NotFound from "./NotFound";
 import RequireAuth from "./authentication/RequireAuth";
 import { AuthProvider } from "./authentication/useAuthStatus";
 import { QueryClient, QueryClientProvider } from "react-query";
-import TransactionListPage from "./ledger/transactions/TransactionListPage";
+import HomePage from "./HomePage";
+import { NotificationsProvider } from "@mantine/notifications";
 
 const AppLayout = () => (
   <AppShell
@@ -45,7 +46,7 @@ const AppRoutes = () => (
         index
         element={
           <RequireAuth>
-            <TransactionListPage />
+            <HomePage />
           </RequireAuth>
         }
       />
@@ -61,9 +62,11 @@ const App = () => (
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={{ primaryColor: "green" }}>
-        <AuthProvider>
-          <AppRoutes />
-        </AuthProvider>
+        <NotificationsProvider>
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
+        </NotificationsProvider>
       </MantineProvider>
     </QueryClientProvider>
   </BrowserRouter>
