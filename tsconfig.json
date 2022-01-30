@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "target": "es2020",
+    "jsx": "preserve",
+    "strict": true,
+    "strictFunctionTypes": true,
+    "sourceMap": true
+  },
+  "exclude": ["node_modules", "**/node_modules/*"]
+}
