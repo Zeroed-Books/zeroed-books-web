@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    API_ROOT?: string;
+    API_ROOT: null | string;
   }
 }
 
