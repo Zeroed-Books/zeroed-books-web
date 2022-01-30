@@ -1,6 +1,7 @@
+import { AxiosError } from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { getAuthStatus } from "./api";
+import { AuthStatus, getAuthStatus } from "./api";
 
 interface AuthContextData {
   isAuthenticated: boolean;
@@ -36,9 +37,14 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  useQuery(["authentication", "me"], getAuthStatus, {
-    onError: () => {
-      setAuthenticated(false);
+  useQuery<AuthStatus, AxiosError>(["authentication", "me"], getAuthStatus, {
+    onError: (error) => {
+      // Only a received 401 response should mark the user as unauthenticated.
+      // It's common to receive network errors from a query that occurs as the
+      // user is refreshing the page, particularly in a dev environment.
+      if (error.response?.status === 401) {
+        setAuthenticated(false);
+      }
     },
     onSuccess: () => {
       setAuthenticated(true);
