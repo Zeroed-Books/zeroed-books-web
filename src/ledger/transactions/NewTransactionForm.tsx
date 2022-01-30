@@ -37,7 +37,13 @@ const NewTransactionForm = () => {
           message: "Transaction created.",
         });
 
+        // Reset the form, but leave the selected date intact because a user is
+        // likely to be entering transaction chronologically, and the next
+        // transaction is probably close to the one they just entered.
+        const selectedDate = form.values.date;
         form.reset();
+        form.setFieldValue("date", selectedDate);
+
         queryClient.invalidateQueries(transactionKeys.list());
       },
     }
