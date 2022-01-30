@@ -1,21 +1,20 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Anchor,
   AppShell,
+  Center,
   Group,
   Header,
+  Loader,
   MantineProvider,
   Title,
 } from "@mantine/core";
 import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
-import LoginPage from "./authentication/LoginPage";
 import NotFound from "./NotFound";
 import RequireAuth from "./authentication/RequireAuth";
 import { AuthProvider } from "./authentication/useAuthStatus";
 import { QueryClient, QueryClientProvider } from "react-query";
-import HomePage from "./HomePage";
 import { NotificationsProvider } from "@mantine/notifications";
-import TransactionDetailPage from "./ledger/transactions/TransactionDetailPage";
 
 const AppLayout = () => (
   <AppShell
@@ -46,17 +45,23 @@ const RequireAuthForTree = () => (
   </RequireAuth>
 );
 
+const LazyHome = React.lazy(() => import("./HomePage"));
+const LazyTransactionDetail = React.lazy(
+  () => import("./ledger/transactions/TransactionDetailPage")
+);
+const LazyLogin = React.lazy(() => import("./authentication/LoginPage"));
+
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<AppLayout />}>
       <Route element={<RequireAuthForTree />}>
-        <Route index element={<HomePage />} />
+        <Route index element={<LazyHome />} />
         <Route
           path="transactions/:transactionID"
-          element={<TransactionDetailPage />}
+          element={<LazyTransactionDetail />}
         />
       </Route>
-      <Route path="login" element={<LoginPage />} />
+      <Route path="login" element={<LazyLogin />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   </Routes>
@@ -69,9 +74,17 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={{ primaryColor: "green" }}>
         <NotificationsProvider>
-          <AuthProvider>
-            <AppRoutes />
-          </AuthProvider>
+          <Suspense
+            fallback={
+              <Center style={{ height: "200px", width: "100%" }}>
+                <Loader size="xl" />
+              </Center>
+            }
+          >
+            <AuthProvider>
+              <AppRoutes />
+            </AuthProvider>
+          </Suspense>
         </NotificationsProvider>
       </MantineProvider>
     </QueryClientProvider>

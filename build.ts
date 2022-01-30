@@ -35,6 +35,15 @@ const copyDir = async (src: string, dest: string): Promise<void> => {
   }
 };
 
+const defaultBuildOptions = (): esbuild.BuildOptions => ({
+  bundle: true,
+  entryPoints: ENTRY_POINTS,
+  format: "esm",
+  logLevel: "info",
+  sourcemap: true,
+  splitting: true,
+});
+
 const build = async (): Promise<void> => {
   try {
     console.log("Cleaning existing build directory...");
@@ -47,12 +56,14 @@ const build = async (): Promise<void> => {
 
     console.log("Building with esbuild...");
     await esbuild.build({
-      bundle: true,
-      entryPoints: ENTRY_POINTS,
-      logLevel: "info",
+      ...defaultBuildOptions(),
+      define: {
+        // Make any environment variable access equate to `undefined` for the
+        // production build.
+        "process.env": "{}",
+      },
       minify: true,
       outdir: `${BUILD_DIR}/${BUNDLE_DIR}`,
-      sourcemap: true,
     });
     console.log("Build complete.\n");
   } catch (error) {
@@ -81,14 +92,11 @@ const serve = async (): Promise<void> => {
         servedir: PUBLIC_DIR,
       },
       {
-        bundle: true,
+        ...defaultBuildOptions(),
         define: {
           "process.env.API_ROOT": `"${process.env.API_ROOT}"`,
         },
-        entryPoints: ENTRY_POINTS,
-        logLevel: "info",
         outdir: `${PUBLIC_DIR}/${BUNDLE_DIR}`,
-        sourcemap: true,
       }
     );
   } catch (error) {
