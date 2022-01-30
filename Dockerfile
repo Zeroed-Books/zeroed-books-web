@@ -8,7 +8,7 @@ RUN npm ci
 
 # Build the application
 COPY . .
-RUN npm run build && ls dist
+RUN npm run build
 
 
 # The production image is a customized NGINX image that manipulates some
@@ -20,6 +20,5 @@ COPY ./nginx/webapp.conf /etc/nginx/conf.d/default.conf
 COPY ./entrypoint.sh /entrypoint.sh
 
 COPY --from=builder /opt/zeroed-books-web/dist/ /usr/share/nginx/html
-RUN ls /usr/share/nginx/html
 
 ENTRYPOINT [ "/entrypoint.sh" ]
