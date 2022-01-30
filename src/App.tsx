@@ -15,6 +15,7 @@ import { AuthProvider } from "./authentication/useAuthStatus";
 import { QueryClient, QueryClientProvider } from "react-query";
 import HomePage from "./HomePage";
 import { NotificationsProvider } from "@mantine/notifications";
+import TransactionDetailPage from "./ledger/transactions/TransactionDetailPage";
 
 const AppLayout = () => (
   <AppShell
@@ -39,17 +40,22 @@ const AppLayout = () => (
   </AppShell>
 );
 
+const RequireAuthForTree = () => (
+  <RequireAuth>
+    <Outlet />
+  </RequireAuth>
+);
+
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<AppLayout />}>
-      <Route
-        index
-        element={
-          <RequireAuth>
-            <HomePage />
-          </RequireAuth>
-        }
-      />
+      <Route element={<RequireAuthForTree />}>
+        <Route index element={<HomePage />} />
+        <Route
+          path="transactions/:transactionID"
+          element={<TransactionDetailPage />}
+        />
+      </Route>
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFound />} />
     </Route>

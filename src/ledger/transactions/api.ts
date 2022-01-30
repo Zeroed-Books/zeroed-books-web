@@ -53,6 +53,13 @@ export const createTransaction = async (
   return response.data;
 };
 
+export const getTransaction = async (id: string): Promise<Transaction> => {
+  const url = `${API_ROOT}/ledger/transactions/${id}`;
+  const response = await client.get<Transaction>(url);
+
+  return response.data;
+};
+
 export const getTransactions = async (): Promise<
   ResourceCollection<Transaction>
 > => {
