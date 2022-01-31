@@ -58,9 +58,7 @@ const build = async (): Promise<void> => {
     await esbuild.build({
       ...defaultBuildOptions(),
       define: {
-        // Make any environment variable access equate to `undefined` for the
-        // production build.
-        "process.env": "{}",
+        "process.env.NODE_ENV": "'production'",
       },
       minify: true,
       outdir: `${BUILD_DIR}/${BUNDLE_DIR}`,
