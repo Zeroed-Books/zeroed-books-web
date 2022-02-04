@@ -46,10 +46,19 @@ const RequireAuthForTree = () => (
 );
 
 const LazyHome = React.lazy(() => import("./HomePage"));
+const LazyLogin = React.lazy(() => import("./authentication/LoginPage"));
+const LazyPasswordReset = React.lazy(
+  () => import("./identities/PasswordResetPage")
+);
+const LazyPasswordResetRequest = React.lazy(
+  () => import("./authentication/PasswordResetRequestPage")
+);
+const LazyPasswordResetRequestSent = React.lazy(
+  () => import("./identities/PasswordResetRequestSentPage")
+);
 const LazyTransactionDetail = React.lazy(
   () => import("./ledger/transactions/TransactionDetailPage")
 );
-const LazyLogin = React.lazy(() => import("./authentication/LoginPage"));
 
 const AppRoutes = () => (
   <Routes>
@@ -62,6 +71,11 @@ const AppRoutes = () => (
         />
       </Route>
       <Route path="login" element={<LazyLogin />} />
+      <Route path="reset-your-password">
+        <Route index element={<LazyPasswordResetRequest />} />
+        <Route path="sent" element={<LazyPasswordResetRequestSent />} />
+        <Route path=":token" element={<LazyPasswordReset />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
   </Routes>
