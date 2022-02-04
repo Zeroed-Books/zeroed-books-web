@@ -11,7 +11,8 @@ const PUBLIC_DIR = "public";
 const BUNDLE_DIR = "js";
 const BUILD_DIR = "dist";
 
-const ENTRY_POINTS = ["src/index.tsx"];
+const ENTRY_POINT = "src/index.tsx";
+const ENTRY_POINT_REFERENCE = path.resolve(BUILD_DIR, "index.html");
 
 const rmDir = async (target: string): Promise<void> => {
   await fs.rm(target, { force: true, recursive: true });
@@ -35,9 +36,26 @@ const copyDir = async (src: string, dest: string): Promise<void> => {
   }
 };
 
+const replaceEntryPointReference = async (
+  referencingFile: string,
+  targetScript: string,
+  newPath: string
+) => {
+  let relativeScriptPath = path.relative(BUILD_DIR, newPath);
+
+  let referenceContent = await fs.readFile(referencingFile, "utf8");
+  referenceContent = referenceContent.replace(targetScript, relativeScriptPath);
+
+  await fs.writeFile(referencingFile, referenceContent, "utf8");
+
+  console.log(
+    `[${referencingFile}] Replaced reference to '${targetScript}' with built reference '${relativeScriptPath}'`
+  );
+};
+
 const defaultBuildOptions = (): esbuild.BuildOptions => ({
   bundle: true,
-  entryPoints: ENTRY_POINTS,
+  entryPoints: [ENTRY_POINT],
   format: "esm",
   logLevel: "info",
   sourcemap: true,
@@ -55,15 +73,31 @@ const build = async (): Promise<void> => {
     console.log("Public files copied.\n");
 
     console.log("Building with esbuild...");
-    await esbuild.build({
+    let buildResult = await esbuild.build({
       ...defaultBuildOptions(),
       define: {
         "process.env.NODE_ENV": "'production'",
       },
+      entryNames: "[dir]/[name]-[hash]",
+      metafile: true,
       minify: true,
       outdir: `${BUILD_DIR}/${BUNDLE_DIR}`,
     });
     console.log("Build complete.\n");
+
+    console.log("Replacing output references...");
+    for (const [outfile, output] of Object.entries(
+      buildResult.metafile.outputs
+    )) {
+      if (output.entryPoint === ENTRY_POINT) {
+        await replaceEntryPointReference(
+          ENTRY_POINT_REFERENCE,
+          "js/index.js",
+          outfile
+        );
+      }
+    }
+    console.log("Finished replacing output references.\n");
   } catch (error) {
     console.error(error);
     process.exit(1);
