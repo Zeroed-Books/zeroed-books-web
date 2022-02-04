@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@mantine/core": "^3.6.3",
-    "@mantine/dates": "^3.6.3",
+    "@mantine/dates": "^3.6.5",
     "@mantine/hooks": "^3.6.3",
     "@mantine/notifications": "^3.6.3",
     "@modulz/radix-icons": "^4.0.0",
