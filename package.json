@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/Zeroed-Books/zeroed-books-web#readme",
   "devDependencies": {
-    "@types/react": "^17.0.38",
+    "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "esbuild": "^0.14.13",
     "husky": "^7.0.0",
