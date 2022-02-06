@@ -88,23 +88,12 @@ const TransactionList = () => {
     }
   );
 
-  const handleLoadMore = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      if (!listQuery.hasNextPage) {
-        return;
-      }
-
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          listQuery.fetchNextPage();
-          return;
-        }
-      }
-    },
-    [listQuery.hasNextPage]
-  );
-
-  const [loadMoreRef, observer] = useIntersection();
+  const [loadMoreRef, observer] = useIntersection({
+    // On mobile, the URL bar at the bottom of the screen prevents the target
+    // element from ever being intersected. Adding a 100px margin at the bottom
+    // fixes the problem.
+    rootMargin: "0px 0px 100px 0px",
+  });
 
   useEffect(() => {
     if (
