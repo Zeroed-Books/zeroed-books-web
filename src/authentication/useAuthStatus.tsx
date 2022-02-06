@@ -1,5 +1,11 @@
 import { AxiosError } from "axios";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useQuery } from "react-query";
 import { AuthStatus, getAuthStatus } from "./api";
 
@@ -22,7 +28,10 @@ const initialAuthStatus =
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [isAuthenticated, setAuthenticated] = useState(initialAuthStatus);
-  const value = { isAuthenticated, setAuthenticated };
+  const value = useMemo(
+    () => ({ isAuthenticated, setAuthenticated }),
+    [isAuthenticated, setAuthenticated]
+  );
 
   // Cache the current authentication status to local storage so we can use it
   // as the initial state for the next page load.
@@ -33,6 +42,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       // We don't really care that the caching operation failed because it just
       // means the auth status won't be immediately available on the next page
       // load, and we'll have to wait for the query to go through.
+      // eslint-disable-next-line no-console
       console.debug("Failed to persist authentication status:", e);
     }
   }, [isAuthenticated]);

@@ -11,7 +11,7 @@ const RequireAuth: React.FC<Props> = ({ children }) => {
   const location = useLocation();
 
   if (!auth.isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace={true} />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
