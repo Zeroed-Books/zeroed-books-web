@@ -4,6 +4,7 @@ import { API_ROOT } from "../../settings";
 const client = apiClient();
 
 export interface ResourceCollection<T> {
+  next: null | string;
   items: T[];
 }
 
@@ -67,11 +68,18 @@ export const getTransaction = async (id: string): Promise<Transaction> => {
   return response.data;
 };
 
-export const getTransactions = async (): Promise<
-  ResourceCollection<Transaction>
-> => {
+interface TransactionListParams {
+  account?: string;
+  after?: string;
+}
+
+export const getTransactions = async (
+  params?: Partial<TransactionListParams>
+): Promise<ResourceCollection<Transaction>> => {
   const url = `${API_ROOT}/ledger/transactions`;
-  const response = await client.get<ResourceCollection<Transaction>>(url);
+  const response = await client.get<ResourceCollection<Transaction>>(url, {
+    params,
+  });
 
   return response.data;
 };

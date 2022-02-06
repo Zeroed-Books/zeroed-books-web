@@ -1,8 +1,19 @@
-import { Anchor, Group, Paper, Skeleton, Text } from "@mantine/core";
-import React from "react";
-import { useQuery } from "react-query";
+import {
+  Anchor,
+  Button,
+  Center,
+  Divider,
+  Group,
+  Loader,
+  Paper,
+  Skeleton,
+  Text,
+} from "@mantine/core";
+import { useIntersection } from "@mantine/hooks";
+import React, { useCallback, useEffect } from "react";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { getTransactions, Transaction } from "./api";
+import { getTransactions, ResourceCollection, Transaction } from "./api";
 import { transactionKeys } from "./queries";
 
 interface DisplayTransactionListProps {
@@ -66,13 +77,70 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
 };
 
 const TransactionList = () => {
-  const listQuery = useQuery(transactionKeys.list(), getTransactions);
+  const fetchTransactions = async ({ pageParam }: { pageParam?: string }) =>
+    getTransactions({ after: pageParam ?? undefined });
+
+  const listQuery = useInfiniteQuery<ResourceCollection<Transaction>>(
+    transactionKeys.list(),
+    fetchTransactions,
+    {
+      getNextPageParam: (lastPage) => lastPage.next ?? undefined,
+    }
+  );
+
+  const handleLoadMore = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      if (!listQuery.hasNextPage) {
+        return;
+      }
+
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          listQuery.fetchNextPage();
+          return;
+        }
+      }
+    },
+    [listQuery.hasNextPage]
+  );
+
+  const [loadMoreRef, observer] = useIntersection();
+
+  useEffect(() => {
+    if (
+      !listQuery.isFetchingNextPage &&
+      listQuery.hasNextPage &&
+      observer?.isIntersecting
+    ) {
+      listQuery.fetchNextPage();
+    }
+  }, [
+    // Include `isFetching` so that if a page is fetched and the last element is
+    // still in the viewport, the effect is triggered again.
+    listQuery.isFetching,
+    observer?.isIntersecting,
+  ]);
 
   return (
-    <DisplayTransactionList
-      loading={listQuery.isFetching}
-      transactions={listQuery?.data?.items ?? []}
-    />
+    <>
+      {listQuery.data?.pages?.map((page, i) => (
+        <DisplayTransactionList
+          key={i}
+          loading={listQuery.isFetching}
+          transactions={page?.items ?? []}
+        />
+      ))}
+
+      <Divider mx="xl" my="lg" ref={loadMoreRef} />
+
+      <Center>
+        {!listQuery.hasNextPage ? (
+          <Text color="dimmed">No more transactions.</Text>
+        ) : (
+          listQuery.isFetchingNextPage && <Loader />
+        )}
+      </Center>
+    </>
   );
 };
 
