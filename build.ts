@@ -23,14 +23,19 @@ const copyDir = async (src: string, dest: string): Promise<void> => {
   const entries = await fs.readdir(src, { withFileTypes: true });
 
   for (const entry of entries) {
-    let srcPath = path.join(src, entry.name);
-    let destPath = path.join(dest, entry.name);
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    // Allow for awaits in a loop because copying a file depends on its
+    // directory existing.
 
     if (entry.isDirectory()) {
       console.log("Recursing into directory:", srcPath);
+      // eslint-disable-next-line no-await-in-loop
       await copyDir(srcPath, destPath);
     } else {
       console.log(`Copying '${srcPath}' to '${destPath}'`);
+      // eslint-disable-next-line no-await-in-loop
       await fs.copyFile(srcPath, destPath);
     }
   }
@@ -41,7 +46,7 @@ const replaceEntryPointReference = async (
   targetScript: string,
   newPath: string
 ) => {
-  let relativeScriptPath = path.relative(BUILD_DIR, newPath);
+  const relativeScriptPath = path.relative(BUILD_DIR, newPath);
 
   let referenceContent = await fs.readFile(referencingFile, "utf8");
   referenceContent = referenceContent.replace(targetScript, relativeScriptPath);
@@ -73,7 +78,7 @@ const build = async (): Promise<void> => {
     console.log("Public files copied.\n");
 
     console.log("Building with esbuild...");
-    let buildResult = await esbuild.build({
+    const buildResult = await esbuild.build({
       ...defaultBuildOptions(),
       define: {
         "process.env.NODE_ENV": "'production'",
@@ -86,10 +91,14 @@ const build = async (): Promise<void> => {
     console.log("Build complete.\n");
 
     console.log("Replacing output references...");
+
     for (const [outfile, output] of Object.entries(
       buildResult.metafile.outputs
     )) {
       if (output.entryPoint === ENTRY_POINT) {
+        // We can't run these operations concurrently in case multiple entry
+        // points are referenced in the same file.
+        // eslint-disable-next-line no-await-in-loop
         await replaceEntryPointReference(
           ENTRY_POINT_REFERENCE,
           "js/index.js",

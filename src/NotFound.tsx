@@ -6,7 +6,7 @@ const NotFound = () => (
     <Title order={1} mb="lg">
       Not Found
     </Title>
-    <Text size="lg">You've reached a page that doesn't exist.</Text>
+    <Text size="lg">You&apos;ve reached a page that doesn&apos;t exist.</Text>
   </Container>
 );
 

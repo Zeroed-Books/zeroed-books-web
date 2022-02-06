@@ -12,6 +12,7 @@ import {
 } from "./api";
 
 interface Props {
+  // eslint-disable-next-line react/require-default-props
   error?: TransactionValidationError;
   formData: UseForm<FormData>;
   loading: boolean;
@@ -51,33 +52,31 @@ const EntryForm: React.FC<EntryFormProps> = ({
   index,
   loading,
   onChange,
-}) => {
-  return (
-    <Group ml="lg" mb="sm">
-      <TextInput
-        disabled={loading}
-        label="Account"
-        onChange={(e) =>
-          onChange(index, { ...entry, account: e.currentTarget.value })
-        }
-        sx={{ flexGrow: 1 }}
-        value={entry.account}
-      />
-      <TextInput
-        disabled={loading}
-        icon="$"
-        label="Amount"
-        onChange={(e) =>
-          onChange(index, {
-            ...entry,
-            amount: { currency: "USD", value: e.currentTarget.value },
-          })
-        }
-        value={entry.amount?.value ?? ""}
-      />
-    </Group>
-  );
-};
+}) => (
+  <Group ml="lg" mb="sm">
+    <TextInput
+      disabled={loading}
+      label="Account"
+      onChange={(e) =>
+        onChange(index, { ...entry, account: e.currentTarget.value })
+      }
+      sx={{ flexGrow: 1 }}
+      value={entry.account}
+    />
+    <TextInput
+      disabled={loading}
+      icon="$"
+      label="Amount"
+      onChange={(e) =>
+        onChange(index, {
+          ...entry,
+          amount: { currency: "USD", value: e.currentTarget.value },
+        })
+      }
+      value={entry.amount?.value ?? ""}
+    />
+  </Group>
+);
 
 const TransactionForm: React.FC<Props> = ({
   error,
@@ -153,6 +152,7 @@ const TransactionForm: React.FC<Props> = ({
         <EntryForm
           entry={entry}
           index={index}
+          // eslint-disable-next-line react/no-array-index-key
           key={index}
           loading={loading}
           onChange={handleEntryChange}

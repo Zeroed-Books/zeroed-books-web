@@ -67,8 +67,10 @@ const TransactionDetailPage = () => {
   const { transactionID } = useParams();
   const query = useQuery(transactionKeys.detail(transactionID), async () => {
     if (transactionID) {
-      return await getTransaction(transactionID);
+      return getTransaction(transactionID);
     }
+
+    throw new Error("No transaction ID provided.");
   });
 
   return (
@@ -85,11 +87,13 @@ const TransactionDetailPage = () => {
         )}
       </Breadcrumbs>
 
+      {/* eslint-disable-next-line no-nested-ternary */}
       {query.isError ? (
         <Alert color="red" title="Error">
           Something went wrong loading the transaction.
         </Alert>
-      ) : query.isLoading ? (
+      ) : // eslint-disable-next-line no-nested-ternary
+      query.isLoading ? (
         <Center>
           <Loader size="xl" />
         </Center>

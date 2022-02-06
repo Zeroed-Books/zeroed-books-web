@@ -10,11 +10,11 @@ import {
   Title,
 } from "@mantine/core";
 import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { NotificationsProvider } from "@mantine/notifications";
 import NotFound from "./NotFound";
 import RequireAuth from "./authentication/RequireAuth";
 import { AuthProvider } from "./authentication/useAuthStatus";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { NotificationsProvider } from "@mantine/notifications";
 
 const AppLayout = () => (
   <AppShell

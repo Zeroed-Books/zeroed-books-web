@@ -1,4 +1,4 @@
-import { Button, Container, List, Text, TextInput, Title } from "@mantine/core";
+import { Button, Container, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import { EnvelopeClosedIcon } from "@modulz/radix-icons";
 import { AxiosError } from "axios";
@@ -37,7 +37,7 @@ const PasswordResetRequestPage = () => {
       </Title>
       <Text mb="xl">
         Forgot your password? Enter the email address you used to create your
-        account, and we'll send you a link to reset your password.
+        account, and we&apos;ll send you a link to reset your password.
       </Text>
 
       <form onSubmit={form.onSubmit((data) => mutation.mutate(data.email))}>

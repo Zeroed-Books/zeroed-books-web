@@ -16,7 +16,7 @@ const LoginPage = () => {
   const authStatus = useAuthStatus();
   const location = useLocation();
 
-  let nextURL = (location.state as PageState)?.from?.pathname ?? "/";
+  const nextURL = (location.state as PageState)?.from?.pathname ?? "/";
 
   const queryClient = useQueryClient();
   const loginMutation = useMutation<void, AxiosError, Credentials>(

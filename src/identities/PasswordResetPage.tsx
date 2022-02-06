@@ -1,16 +1,7 @@
-import {
-  Alert,
-  Button,
-  Container,
-  List,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Alert, Button, Container, PasswordInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import { useNotifications } from "@mantine/notifications";
-import { EnvelopeClosedIcon, LockClosedIcon } from "@modulz/radix-icons";
+import { LockClosedIcon } from "@modulz/radix-icons";
 import { AxiosError } from "axios";
 import React from "react";
 import { useMutation } from "react-query";
@@ -21,10 +12,6 @@ import { createPasswordReset } from "./api";
 interface PasswordResetError {
   new_password: string[];
   token: string[];
-}
-
-interface ErrorProps {
-  error?: string[];
 }
 
 const PasswordResetPage = () => {

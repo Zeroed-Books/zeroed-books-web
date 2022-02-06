@@ -1,6 +1,5 @@
 import {
   Anchor,
-  Button,
   Center,
   Divider,
   Group,
@@ -10,8 +9,8 @@ import {
   Text,
 } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
-import React, { useCallback, useEffect } from "react";
-import { useInfiniteQuery, useQuery } from "react-query";
+import React, { useEffect } from "react";
+import { useInfiniteQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getTransactions, ResourceCollection, Transaction } from "./api";
 import { transactionKeys } from "./queries";
@@ -31,6 +30,7 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
     return (
       <>
         {[...Array(5).keys()].map((_, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Paper key={index} padding="md" mb="lg" shadow="sm">
             <Skeleton height={16} mb="md" width="30%" />
             <Skeleton height={8} mb="sm" ml="xl" width="80%" />
@@ -114,7 +114,8 @@ const TransactionList = () => {
     <>
       {listQuery.data?.pages?.map((page, i) => (
         <DisplayTransactionList
-          key={i}
+          // eslint-disable-next-line react/no-array-index-key
+          key={`${i}-${page.next}`}
           loading={listQuery.isFetching}
           transactions={page?.items ?? []}
         />
