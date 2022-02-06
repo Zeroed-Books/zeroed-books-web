@@ -9,7 +9,7 @@ import {
   Text,
 } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getTransactions, ResourceCollection, Transaction } from "./api";
@@ -95,13 +95,23 @@ const TransactionList = () => {
     rootMargin: "0px 0px 100px 0px",
   });
 
+  // Delay the page load by a little bit to avoid consecutive page fetches due
+  // to the intersection firing again before the loaded page renders.
+  const [pendingPageLoad, setPendingPageLoad] = useState<null | number>(null);
   useEffect(() => {
     if (
       !listQuery.isFetchingNextPage &&
       listQuery.hasNextPage &&
       observer?.isIntersecting
     ) {
-      listQuery.fetchNextPage();
+      if (pendingPageLoad === null) {
+        setPendingPageLoad(
+          window.setTimeout(() => {
+            listQuery.fetchNextPage();
+            setPendingPageLoad(null);
+          }, 50)
+        );
+      }
     }
   }, [
     // Include `isFetching` so that if a page is fetched and the last element is
