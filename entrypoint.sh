@@ -2,14 +2,43 @@
 
 set -euf
 
-target=/usr/share/nginx/html/index.html
-echo "Replacing values in '${target}'"
+serve() {
+    target=/usr/share/nginx/html/index.html
+    echo "Replacing values in '${target}'"
 
-sed -i "s+window.API_ROOT = null;+window.API_ROOT = \"${API_ROOT}\";+" "${target}"
-echo "  - Set API_ROOT = \"${API_ROOT}\""
+    sed -i "s+window.API_ROOT = null;+window.API_ROOT = \"${API_ROOT}\";+" "${target}"
+    echo "  - Set API_ROOT = \"${API_ROOT}\""
 
-echo "Replacements done. Executing NGINX process."
+    echo "Replacements done. Executing NGINX process."
 
-# The `-g 'daemon off';` argument is important so that NGINX runs in the
-# foreground like Docker expects.`
-exec nginx -g 'daemon off;'
+    # The `-g 'daemon off';` argument is important so that NGINX runs in the
+    # foreground like Docker expects.`
+    exec nginx -g 'daemon off;'
+}
+
+deploy() {
+    cd /usr/share/nginx/html
+    s3-copy \
+        -app-version "$1"
+        -bucket "${DEPLOY_BUCKET}"
+        -endpoint "${DEPLOY_BUCKET_ENDPOINT}"
+}
+
+the_command=$1
+if [ -z "${the_command}" ]; then
+    echo "A command is required. Either 'deploy' or 'serve'."
+    exit 1
+fi
+shift
+
+if [ "serve" = "${the_command}" ]; then
+    exec serve
+elif [ "deploy" ] = "${the_command}"; then
+    app_version=$1
+    if [ -z "${app_version}" ]; then
+        echo "An app version is required with 'deploy'."
+        exit 1
+    fi
+
+    deploy app_version
+fi

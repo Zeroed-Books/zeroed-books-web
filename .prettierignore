@@ -1,2 +1,6 @@
 dist/
 node_modules/
+
+# Prettier will expand the templating delimeters '{{' and '}}' to '{ {' and
+# '} }', respectively.
+charts/**/templates
