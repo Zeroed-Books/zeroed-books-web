@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ print .Release.Name "-deploy-" (sha256sum (printf "%d-%s" .Release.Revision .Values.image) | trunc 12) | quote }}
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - name: {{ .Release.Name | quote }}
+          image: {{ (print .Values.image.name ":" .Values.image.tag) | quote }}
+          imagePullPolicy: IfNotPresent
+
+          args:
+            - "deploy"
+            - {{ .Values.image.tag | quote }}
+
+          env:
+            - name: ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.secrets.name | quote }}
+                  key: access_key_id
+
+            - name: SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.secrets.name | quote }}
+                  key: secret_access_key
+
+            - name: DEPLOY_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.config.configMap.name | quote }}
+                  key: deploy_bucket
+
+            - name: DEPLOY_BUCKET_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.config.configMap.name | quote }}
+                  key: deploy_bucket_endpoint
+
+      restartPolicy: Never
+
+  backoffLimit: 5

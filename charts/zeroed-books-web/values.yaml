@@ -1,0 +1,24 @@
+# Default values for helm-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  name: "zeroedbooks/api"
+  tag: latest
+
+config:
+  # Expected keys:
+  # - deploy_bucket: S3 bucket to store deployed files in.
+  # - deploy_bucket_endpoint: API endpoint used to access S3 bucket.
+  configMap:
+    name: "zeroed-books-web"
+
+  # Expected keys:
+  # - access_key_id: Key to use to authenticate with S3.
+  # - secret_access_key: Secret to use when authenticating with S3.
+  secrets:
+    name: "zeroed-books-web"
+
+resources: {}

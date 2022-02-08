@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name | quote }}
+  namespace: default
+  labels:
+    app: {{ .Release.Name | quote }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name | quote }}
+    spec:
+      containers:
+        - name: {{ print .Release.Name | quote }}
+          image: {{ (print .Values.image.name ":" .Values.image.tag) | quote }}
+          imagePullPolicy: IfNotPresent
+
+          args: ["serve"]
+
+          env:
+            - name: API_ROOT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.config.configMap.name | quote }}
+                  key: api_root
+
+          ports:
+            - containerPort: 80
+
+          resources: {{ - toYaml .Values.resources | nindent 12 }}
