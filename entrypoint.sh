@@ -9,6 +9,9 @@ serve() {
     sed -i "s+window.API_ROOT = null;+window.API_ROOT = \"${API_ROOT}\";+" "${target}"
     echo "  - Set API_ROOT = \"${API_ROOT}\""
 
+    echo -e "\n\nGenerating NGINX config:"
+    envsubst '$DEPLOY_BUCKET $DEPLOY_BUCKET_ENDPOINT' < "/etc/nginx/conf.d/default.conf.tpl" | tee "/etc/nginx/conf.d/default.conf"
+
     echo "Replacements done. Executing NGINX process."
 
     # The `-g 'daemon off';` argument is important so that NGINX runs in the
@@ -32,7 +35,7 @@ fi
 shift
 
 if [ "serve" = "${the_command}" ]; then
-    exec serve
+    serve
 elif [ "deploy" ] = "${the_command}"; then
     app_version=$1
     if [ -z "${app_version}" ]; then

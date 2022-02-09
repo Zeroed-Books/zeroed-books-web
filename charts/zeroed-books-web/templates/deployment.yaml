@@ -29,6 +29,18 @@ spec:
                   name: {{ .Values.config.configMap.name | quote }}
                   key: api_root
 
+            - name: DEPLOY_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.config.configMap.name | quote }}
+                  key: deploy_bucket
+
+            - name: DEPLOY_BUCKET_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.config.configMap.name | quote }}
+                  key: deploy_bucket_endpoint
+
           ports:
             - containerPort: 80
 
