@@ -36,7 +36,7 @@ shift
 
 if [ "serve" = "${the_command}" ]; then
     serve
-elif [ "deploy" ] = "${the_command}"; then
+elif [ "deploy" = "${the_command}" ]; then
     app_version=$1
     if [ -z "${app_version}" ]; then
         echo "An app version is required with 'deploy'."
