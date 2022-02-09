@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  name: "zeroedbooks/api"
+  name: "zeroedbooks/web"
   tag: latest
 
 config:
