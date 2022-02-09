@@ -17,7 +17,7 @@ import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import { getTransaction, Transaction } from "./api";
 import DeleteTransactionButton from "./DeleteTransactionButton";
-import { transactionKeys } from "./queries";
+import { transactionKeys } from "../queries";
 
 interface TransactionDetailDisplayProps {
   transaction: Transaction;

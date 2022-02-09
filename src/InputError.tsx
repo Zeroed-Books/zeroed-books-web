@@ -2,7 +2,6 @@ import { List, Text } from "@mantine/core";
 import React from "react";
 
 interface Props {
-  // eslint-disable-next-line react/require-default-props
   error?: string[];
 }
 

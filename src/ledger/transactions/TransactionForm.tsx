@@ -12,7 +12,6 @@ import {
 } from "./api";
 
 interface Props {
-  // eslint-disable-next-line react/require-default-props
   error?: TransactionValidationError;
   formData: UseForm<FormData>;
   loading: boolean;

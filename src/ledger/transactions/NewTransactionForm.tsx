@@ -9,7 +9,7 @@ import {
   Transaction,
   TransactionValidationError,
 } from "./api";
-import { transactionKeys } from "./queries";
+import { transactionKeys } from "../queries";
 import TransactionForm, { useTransactionForm } from "./TransactionForm";
 
 const createErrorResponse = (error: AxiosError): TransactionValidationError => {
