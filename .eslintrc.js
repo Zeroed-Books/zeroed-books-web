@@ -52,6 +52,10 @@ module.exports = {
       },
     ],
 
+    // We usually want props to be undefined. Typescript prevents usage of
+    // undefined values.
+    "react/require-default-props": "off",
+
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "error",

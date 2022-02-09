@@ -13,7 +13,7 @@ import React, { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getTransactions, ResourceCollection, Transaction } from "./api";
-import { transactionKeys } from "./queries";
+import { transactionKeys } from "../queries";
 
 interface DisplayTransactionListProps {
   loading: boolean;
@@ -48,7 +48,7 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
           <div>
             <Text>
               {transaction.date} &mdash;{" "}
-              <Anchor component={Link} to={`transactions/${transaction.id}`}>
+              <Anchor component={Link} to={`/transactions/${transaction.id}`}>
                 {transaction.payee}
               </Anchor>
             </Text>
@@ -76,12 +76,16 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
   );
 };
 
-const TransactionList = () => {
+interface Props {
+  account?: string;
+}
+
+const TransactionList: React.FC<Props> = ({ account }) => {
   const fetchTransactions = async ({ pageParam }: { pageParam?: string }) =>
-    getTransactions({ after: pageParam ?? undefined });
+    getTransactions({ account, after: pageParam ?? undefined });
 
   const listQuery = useInfiniteQuery<ResourceCollection<Transaction>>(
-    transactionKeys.list(),
+    transactionKeys.list(account),
     fetchTransactions,
     {
       getNextPageParam: (lastPage) => lastPage.next ?? undefined,

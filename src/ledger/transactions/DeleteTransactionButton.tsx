@@ -6,7 +6,7 @@ import React from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { Navigate } from "react-router-dom";
 import { deleteTransaction, ResourceCollection, Transaction } from "./api";
-import { transactionKeys } from "./queries";
+import { transactionKeys } from "../queries";
 
 interface Props {
   transaction: Transaction;
