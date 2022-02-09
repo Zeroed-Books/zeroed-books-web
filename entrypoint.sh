@@ -22,8 +22,8 @@ serve() {
 deploy() {
     cd /usr/share/nginx/html
     s3-copy \
-        -app-version "$1"
-        -bucket "${DEPLOY_BUCKET}"
+        -app-version "$1" \
+        -bucket "${DEPLOY_BUCKET}" \
         -endpoint "${DEPLOY_BUCKET_ENDPOINT}"
 }
 
