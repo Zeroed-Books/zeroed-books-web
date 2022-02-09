@@ -16,13 +16,13 @@ spec:
             - {{ .Values.image.tag | quote }}
 
           env:
-            - name: ACCESS_KEY_ID
+            - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.config.secrets.name | quote }}
                   key: access_key_id
 
-            - name: SECRET_ACCESS_KEY
+            - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.config.secrets.name | quote }}
