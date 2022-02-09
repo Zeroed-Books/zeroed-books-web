@@ -21,4 +21,6 @@ config:
   secrets:
     name: "zeroed-books-web"
 
+additionalDomains: []
+
 resources: {}

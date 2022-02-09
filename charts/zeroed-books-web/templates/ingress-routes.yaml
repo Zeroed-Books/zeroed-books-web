@@ -1,3 +1,11 @@
+{{- $match := "Host(`" -}}
+{{- $match = (print $match (required "A domain must be provided." .Values.domain)) -}}
+{{- if gt (len .Values.additionalDomains) 0 -}}
+  {{- range .Values.additionalDomains -}}
+    {{- $match = print $match "`, `" . -}}
+  {{- end -}}
+{{- end -}}
+{{- $match = print $match "`)"}}
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -9,7 +17,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`{{ required "A domain must be provided." .Values.domain }}`)
+      match: {{ $match }}
       middlewares:
         - name: redirect-http-to-https
           namespace: default
@@ -29,7 +37,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`{{ required "A domain must be provided." .Values.domain }}`)
+      match: {{ $match }}
       services:
         - kind: Service
           name: {{ .Release.Name | quote }}
