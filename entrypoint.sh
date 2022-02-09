@@ -43,5 +43,5 @@ elif [ "deploy" = "${the_command}" ]; then
         exit 1
     fi
 
-    deploy app_version
+    deploy "${app_version}"
 fi
