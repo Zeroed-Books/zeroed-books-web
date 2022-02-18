@@ -45,10 +45,10 @@
     "typescript": "4.5.5"
   },
   "dependencies": {
-    "@mantine/core": "3.6.7",
-    "@mantine/dates": "3.6.7",
-    "@mantine/hooks": "3.6.7",
-    "@mantine/notifications": "3.6.7",
+    "@mantine/core": "3.6.9",
+    "@mantine/dates": "3.6.9",
+    "@mantine/hooks": "3.6.9",
+    "@mantine/notifications": "3.6.9",
     "@modulz/radix-icons": "4.0.0",
     "axios": "0.26.0",
     "dayjs": "1.10.7",
