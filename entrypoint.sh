@@ -44,4 +44,28 @@ elif [ "deploy" = "${the_command}" ]; then
     fi
 
     deploy "${app_version}"
+elif [ "deploy-and-serve" = "${the_command}" ]; then
+    app_version=$1
+    if [ -z "${app_version}" ]; then
+        echo "An app version is required with 'deploy'."
+        exit 1
+    fi
+
+    cat <<EOF
+################################################################################
+#                            Deploying Application                             #
+################################################################################
+
+EOF
+
+    deploy "${app_version}"
+
+    cat <<EOF
+
+################################################################################
+#                             Serving Application                              #
+################################################################################
+EOF
+
+    serve
 fi
