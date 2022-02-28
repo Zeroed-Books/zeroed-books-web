@@ -22,7 +22,6 @@ serve() {
 deploy() {
     cd /usr/share/nginx/html
     s3-copy \
-        -app-version "$1" \
         -bucket "${DEPLOY_BUCKET}" \
         -endpoint "${DEPLOY_BUCKET_ENDPOINT}"
 }
@@ -37,20 +36,8 @@ shift
 if [ "serve" = "${the_command}" ]; then
     serve
 elif [ "deploy" = "${the_command}" ]; then
-    app_version=$1
-    if [ -z "${app_version}" ]; then
-        echo "An app version is required with 'deploy'."
-        exit 1
-    fi
-
     deploy "${app_version}"
 elif [ "deploy-and-serve" = "${the_command}" ]; then
-    app_version=$1
-    if [ -z "${app_version}" ]; then
-        echo "An app version is required with 'deploy'."
-        exit 1
-    fi
-
     cat <<EOF
 ################################################################################
 #                            Deploying Application                             #
