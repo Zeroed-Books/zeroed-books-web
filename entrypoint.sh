@@ -36,7 +36,7 @@ shift
 if [ "serve" = "${the_command}" ]; then
     serve
 elif [ "deploy" = "${the_command}" ]; then
-    deploy "${app_version}"
+    deploy
 elif [ "deploy-and-serve" = "${the_command}" ]; then
     cat <<EOF
 ################################################################################
@@ -45,7 +45,7 @@ elif [ "deploy-and-serve" = "${the_command}" ]; then
 
 EOF
 
-    deploy "${app_version}"
+    deploy
 
     cat <<EOF
 
