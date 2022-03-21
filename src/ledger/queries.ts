@@ -4,6 +4,8 @@ export const accountKeys = {
   balance: (name?: string) => [...accountKeys.balances(), name] as const,
   details: () => [...accountKeys.all, "details"] as const,
   detail: (name?: string) => [...accountKeys.details(), name] as const,
+  popularAccounts: (search?: string) =>
+    [accountKeys.all, "popular", search] as const,
 };
 
 export const transactionKeys = {

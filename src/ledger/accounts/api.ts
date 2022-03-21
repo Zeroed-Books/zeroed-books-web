@@ -16,3 +16,14 @@ export const getAccountBalance = async (
 
   return response.data;
 };
+
+export const getPopularAccounts = async (
+  search?: string
+): Promise<string[]> => {
+  const url = `${API_ROOT}/ledger/accounts`;
+  const response = await client.get<string[]>(url, {
+    params: { query: search },
+  });
+
+  return response.data;
+};
