@@ -5,6 +5,7 @@ import { UseForm } from "@mantine/hooks/lib/use-form/use-form";
 import { CrossCircledIcon } from "@modulz/radix-icons";
 import dayjs from "dayjs";
 import React, { useCallback } from "react";
+import AccountNameInput from "../accounts/AccountNameInput";
 import {
   NewTransaction,
   NewTransactionEntry,
@@ -53,13 +54,10 @@ const EntryForm: React.FC<EntryFormProps> = ({
   onChange,
 }) => (
   <Group ml="lg" mb="sm">
-    <TextInput
+    <AccountNameInput
       disabled={loading}
       label="Account"
-      onChange={(e) =>
-        onChange(index, { ...entry, account: e.currentTarget.value })
-      }
-      sx={{ flexGrow: 1 }}
+      onChange={(newValue) => onChange(index, { ...entry, account: newValue })}
       value={entry.account}
     />
     <TextInput
