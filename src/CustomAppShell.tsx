@@ -21,6 +21,7 @@ interface NavLinkProps {
   exactPath?: boolean;
   icon: React.ReactNode;
   label: string;
+  onClick: () => void;
   to: string;
 }
 
@@ -49,7 +50,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const NavLink = ({ exactPath, icon, label, to }: NavLinkProps) => {
+const NavLink = ({ exactPath, icon, label, onClick, to }: NavLinkProps) => {
   const { classes } = useStyles();
 
   return (
@@ -58,6 +59,7 @@ const NavLink = ({ exactPath, icon, label, to }: NavLinkProps) => {
         classes.navLink + (isActive ? ` ${classes.navLinkActive}` : "")
       }
       end={exactPath}
+      onClick={onClick}
       to={to}
     >
       <Group>
@@ -78,6 +80,8 @@ const CustomAppShell = ({ children }: Props) => {
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
 
+  const closeMenu = React.useCallback(() => setOpened(false), [setOpened]);
+
   return (
     <AppShell
       navbarOffsetBreakpoint="sm"
@@ -88,8 +92,19 @@ const CustomAppShell = ({ children }: Props) => {
           hidden={!opened}
           width={{ sm: 200 }}
         >
-          <NavLink exactPath icon={<HomeIcon />} label="Home" to="/" />
-          <NavLink icon={<ListBulletIcon />} label="Accounts" to="/accounts" />
+          <NavLink
+            exactPath
+            icon={<HomeIcon />}
+            label="Home"
+            onClick={closeMenu}
+            to="/"
+          />
+          <NavLink
+            icon={<ListBulletIcon />}
+            label="Accounts"
+            onClick={closeMenu}
+            to="/accounts"
+          />
         </Navbar>
       }
       header={
