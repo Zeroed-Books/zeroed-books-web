@@ -1,6 +1,6 @@
 import { Alert, Button, Container, PasswordInput, Title } from "@mantine/core";
-import { useForm } from "@mantine/hooks";
-import { useNotifications } from "@mantine/notifications";
+import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
 import { LockClosedIcon } from "@modulz/radix-icons";
 import { AxiosError } from "axios";
 import React from "react";
@@ -15,8 +15,6 @@ interface PasswordResetError {
 }
 
 const PasswordResetPage = () => {
-  const notifications = useNotifications();
-
   const { token } = useParams();
   const mutation = useMutation<void, AxiosError<PasswordResetError>, string>(
     async (password: string) => {
@@ -26,7 +24,7 @@ const PasswordResetPage = () => {
     },
     {
       onSuccess: () => {
-        notifications.showNotification({
+        showNotification({
           color: "green",
           message: "Your password has been changed. Please log in.",
         });

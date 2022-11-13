@@ -1,5 +1,5 @@
 import { Button, Container, Text, TextInput, Title } from "@mantine/core";
-import { useForm } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
 import { EnvelopeClosedIcon } from "@modulz/radix-icons";
 import { AxiosError } from "axios";
 import React from "react";

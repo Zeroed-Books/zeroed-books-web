@@ -1,5 +1,5 @@
 import { Button } from "@mantine/core";
-import { useNotifications } from "@mantine/notifications";
+import { showNotification } from "@mantine/notifications";
 import { CrossCircledIcon, TrashIcon } from "@modulz/radix-icons";
 import { AxiosError } from "axios";
 import React from "react";
@@ -13,8 +13,6 @@ interface Props {
 }
 
 const DeleteTransactionButton: React.FC<Props> = ({ transaction }) => {
-  const notifications = useNotifications();
-
   const queryClient = useQueryClient();
   const mutation = useMutation<void, AxiosError>(
     async () => deleteTransaction(transaction.id),
@@ -22,7 +20,7 @@ const DeleteTransactionButton: React.FC<Props> = ({ transaction }) => {
       onError: (error) => {
         const message =
           error.response?.data?.message ?? "Something went wrong.";
-        notifications.showNotification({
+        showNotification({
           color: "red",
           icon: <CrossCircledIcon />,
           message,
@@ -34,7 +32,7 @@ const DeleteTransactionButton: React.FC<Props> = ({ transaction }) => {
       },
 
       onSuccess: () => {
-        notifications.showNotification({
+        showNotification({
           color: "red",
           icon: <TrashIcon />,
           message: `Transaction for "${transaction.payee}" has been deleted.`,

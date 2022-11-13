@@ -1,7 +1,6 @@
 import { Alert, Button, Group, LoadingOverlay, TextInput } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
-import { useForm } from "@mantine/hooks";
-import { UseForm } from "@mantine/hooks/lib/use-form/use-form";
+import { useForm, UseFormReturnType } from "@mantine/form";
 import { CrossCircledIcon } from "@modulz/radix-icons";
 import dayjs from "dayjs";
 import React, { useCallback } from "react";
@@ -14,7 +13,7 @@ import {
 
 interface Props {
   error?: TransactionValidationError;
-  formData: UseForm<FormData>;
+  formData: UseFormReturnType<FormData>;
   loading: boolean;
   onSubmit: (transaction: NewTransaction) => void;
 }
