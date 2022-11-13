@@ -1,4 +1,4 @@
-import { useNotifications } from "@mantine/notifications";
+import { showNotification } from "@mantine/notifications";
 import { CheckCircledIcon } from "@modulz/radix-icons";
 import { AxiosError } from "axios";
 import React from "react";
@@ -24,14 +24,13 @@ const createErrorResponse = (error: AxiosError): TransactionValidationError => {
 
 const NewTransactionForm = () => {
   const form = useTransactionForm();
-  const notifications = useNotifications();
 
   const queryClient = useQueryClient();
   const mutation = useMutation<Transaction, AxiosError, NewTransaction>(
     createTransaction,
     {
       onSuccess: () => {
-        notifications.showNotification({
+        showNotification({
           color: "green",
           icon: <CheckCircledIcon style={{ width: "32px", height: "32px" }} />,
           message: "Transaction created.",

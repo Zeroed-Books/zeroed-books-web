@@ -39,7 +39,7 @@ const TransactionDetailDisplay: React.FC<TransactionDetailDisplayProps> = ({
         </Text>
       </Title>
 
-      <Paper mb="xl" padding="md" shadow="xs">
+      <Paper mb="xl" p="md" shadow="xs">
         <DeleteTransactionButton transaction={transaction} />
       </Paper>
 

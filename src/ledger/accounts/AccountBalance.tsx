@@ -15,7 +15,7 @@ const AccountBalance: React.FC<Props> = ({ account }) => {
 
   if (query.data && query.data.length > 0) {
     return (
-      <Paper mb="lg" padding="md" shadow="md">
+      <Paper mb="lg" p="md" shadow="md">
         <Title mb="md" order={3}>
           Balance
         </Title>
@@ -31,7 +31,7 @@ const AccountBalance: React.FC<Props> = ({ account }) => {
 
   if (query.isLoading) {
     return (
-      <Paper padding="md" shadow="md">
+      <Paper p="md" shadow="md">
         <Loader size="lg" />
       </Paper>
     );

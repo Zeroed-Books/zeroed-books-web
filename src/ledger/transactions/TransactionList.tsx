@@ -31,7 +31,7 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
       <>
         {[...Array(5).keys()].map((_, index) => (
           // eslint-disable-next-line react/no-array-index-key
-          <Paper key={index} padding="md" mb="lg" shadow="sm">
+          <Paper key={index} p="md" mb="lg" shadow="sm">
             <Skeleton height={16} mb="md" width="30%" />
             <Skeleton height={8} mb="sm" ml="xl" width="80%" />
             <Skeleton height={8} mb="sm" ml="xl" width="80%" />
@@ -44,7 +44,7 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
   return (
     <>
       {transactions.map((transaction) => (
-        <Paper key={transaction.id} mb="lg" padding="md" shadow="sm">
+        <Paper key={transaction.id} mb="lg" p="md" shadow="sm">
           <div>
             <Text>
               {transaction.date} &mdash;{" "}
@@ -92,7 +92,7 @@ const TransactionList: React.FC<Props> = ({ account }) => {
     }
   );
 
-  const [loadMoreRef, observer] = useIntersection({
+  const { ref: loadMoreRef, entry: observer } = useIntersection({
     // On mobile, the URL bar at the bottom of the screen prevents the target
     // element from ever being intersected. Adding a 100px margin at the bottom
     // fixes the problem.

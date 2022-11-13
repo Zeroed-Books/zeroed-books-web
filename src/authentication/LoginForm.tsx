@@ -7,7 +7,7 @@ import {
   PasswordInput,
   TextInput,
 } from "@mantine/core";
-import { useForm } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
 import { EnvelopeClosedIcon, LockClosedIcon } from "@modulz/radix-icons";
 import { Link } from "react-router-dom";
 import { Credentials } from "./api";
