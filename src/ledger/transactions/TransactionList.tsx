@@ -33,7 +33,6 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
         {Array(5)
           .fill(0)
           .map((_, index) => (
-            // eslint-disable-next-line react/no-array-index-key
             <Paper key={index} p="md" mb="lg" shadow="sm">
               <Skeleton height={16} mb="md" width="30%" />
               <Skeleton height={8} mb="sm" ml="xl" width="80%" />
@@ -123,7 +122,6 @@ const TransactionList: React.FC<Props> = ({ account }) => {
     <>
       {listQuery.data?.pages?.map((page, i) => (
         <DisplayTransactionList
-          // eslint-disable-next-line react/no-array-index-key
           key={`${i}-${page.next}`}
           loading={listQuery.isFetching}
           transactions={page?.items ?? []}

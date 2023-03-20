@@ -113,7 +113,7 @@ const TransactionForm: React.FC<Props> = ({
         ...entries.slice(index + 1),
       ]);
     },
-    [formData.setFieldValue, formData.values.entries]
+    [formData]
   );
 
   return (
@@ -150,7 +150,6 @@ const TransactionForm: React.FC<Props> = ({
         <EntryForm
           entry={entry}
           index={index}
-          // eslint-disable-next-line react/no-array-index-key
           key={index}
           loading={loading}
           onChange={handleEntryChange}

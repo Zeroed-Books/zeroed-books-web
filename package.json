@@ -7,9 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "check:code": "eslint --report-unused-disable-directives .",
-    "check:style": "prettier --ignore-unknown --check .",
+    "lint": "next lint --max-warnings 0 --report-unused-disable-directives error",
+    "style:check": "prettier --check .",
+    "style:fix": "prettier --write .",
     "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

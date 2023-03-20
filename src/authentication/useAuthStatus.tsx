@@ -49,7 +49,6 @@ export const AuthProvider = ({ children }: Props) => {
       // We don't really care that the caching operation failed because it just
       // means the auth status won't be immediately available on the next page
       // load, and we'll have to wait for the query to go through.
-      // eslint-disable-next-line no-console
       console.debug("Failed to persist authentication status:", e);
     }
   }, [isAuthenticated]);

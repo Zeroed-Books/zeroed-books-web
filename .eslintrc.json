@@ -10,6 +10,10 @@
     // Prefer the "unused-imports" plugin which makes errors auto-fixable.
     "no-unused-vars": "off",
 
+    "import/no-anonymous-default-export": "error",
+
+    "react-hooks/exhaustive-deps": "error",
+
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "error",

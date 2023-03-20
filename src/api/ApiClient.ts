@@ -1,5 +1,3 @@
-/* eslint-disable spaced-comment */
-
 import axios, { Axios, AxiosRequestConfig } from "axios";
 import {
   AccountBalance,
