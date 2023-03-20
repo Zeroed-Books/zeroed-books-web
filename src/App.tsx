@@ -1,12 +1,16 @@
+"use client";
+
 import React, { Suspense } from "react";
 import { Center, Loader, MantineProvider } from "@mantine/core";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { NotificationsProvider } from "@mantine/notifications";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Notifications } from "@mantine/notifications";
 import NotFound from "./NotFound";
 import RequireAuth from "./authentication/RequireAuth";
 import { AuthProvider } from "./authentication/useAuthStatus";
 import CustomAppShell from "./CustomAppShell";
+import { ApiSettingsProvider } from "./api/useApiSettings";
+import "client-only";
 
 const AppLayout = () => (
   // Add a suspence boundary inside the app shell so that page loads after the
@@ -73,7 +77,11 @@ const AppRoutes = () => (
 
 const queryClient = new QueryClient();
 
-const App = () => (
+interface AppProps {
+  apiRoot: string;
+}
+
+const App = ({ apiRoot }: AppProps) => (
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <MantineProvider
@@ -81,19 +89,20 @@ const App = () => (
         withGlobalStyles
         withNormalizeCSS
       >
-        <NotificationsProvider>
-          <Suspense
-            fallback={
-              <Center style={{ height: "200px", width: "100%" }}>
-                <Loader size="xl" />
-              </Center>
-            }
-          >
+        <Notifications />
+        <Suspense
+          fallback={
+            <Center style={{ height: "200px", width: "100%" }}>
+              <Loader size="xl" />
+            </Center>
+          }
+        >
+          <ApiSettingsProvider apiRoot={apiRoot}>
             <AuthProvider>
               <AppRoutes />
             </AuthProvider>
-          </Suspense>
-        </NotificationsProvider>
+          </ApiSettingsProvider>
+        </Suspense>
       </MantineProvider>
     </QueryClientProvider>
   </BrowserRouter>

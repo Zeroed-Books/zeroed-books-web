@@ -1,4 +1,13 @@
 .devcontainer/
+.github/
 .husky/
-dist/
+.next/
+.vscode/
 node_modules/
+.dockerignore
+.eslintrc.json
+.gitignore
+.lintstagedrc.json
+.npmrc
+.prettierignore
+Dockerfile

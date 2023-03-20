@@ -1,23 +1,24 @@
 import { Button, Container, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { EnvelopeClosedIcon } from "@modulz/radix-icons";
+import { EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import { AxiosError } from "axios";
 import React from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
-import { createPasswordResetRequest } from "../identities/api";
 import InputError from "../InputError";
+import useApiClient from "../api/useApiClient";
 
 interface PasswordResetRequestError {
   email: string[];
 }
 
 const PasswordResetRequestPage = () => {
+  const client = useApiClient();
   const mutation = useMutation<
     void,
     AxiosError<PasswordResetRequestError>,
     string
-  >(createPasswordResetRequest);
+  >((email) => client.createPasswordResetRequest(email));
   const form = useForm({
     initialValues: {
       email: "",

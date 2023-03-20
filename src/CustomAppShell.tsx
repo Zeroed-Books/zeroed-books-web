@@ -12,7 +12,7 @@ import {
   ThemeIcon,
   createStyles,
 } from "@mantine/core";
-import { HomeIcon, ListBulletIcon } from "@modulz/radix-icons";
+import { HomeIcon, ListBulletIcon } from "@radix-ui/react-icons";
 import * as React from "react";
 import { useState } from "react";
 import { Link, NavLink as BaseNavLink } from "react-router-dom";

@@ -8,13 +8,13 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { EnvelopeClosedIcon, LockClosedIcon } from "@modulz/radix-icons";
+import { EnvelopeClosedIcon, LockClosedIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
-import { Credentials } from "./api";
+import { Credentials } from "../api/reps";
 
 interface Props {
   loading: boolean;
-  onSubmit: (credentials: Credentials) => void;
+  onSubmit(credentials: Credentials): void;
 }
 
 const LoginForm: React.FC<Props> = ({ loading, onSubmit }) => {

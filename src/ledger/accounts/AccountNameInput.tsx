@@ -1,9 +1,9 @@
 import { Autocomplete } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { accountKeys } from "../queries";
-import { getPopularAccounts } from "./api";
+import useApiClient from "@/src/api/useApiClient";
 
 interface Props {
   disabled?: boolean;
@@ -19,9 +19,9 @@ const AccountNameInput: React.FC<Props> = ({
   value,
 }) => {
   const [debouncedValue] = useDebouncedValue(value, 200);
-  const query = useQuery(
-    accountKeys.popularAccounts(debouncedValue),
-    async () => getPopularAccounts(debouncedValue)
+  const client = useApiClient();
+  const query = useQuery(accountKeys.popularAccounts(debouncedValue), () =>
+    client.getPopularAccounts(debouncedValue)
   );
 
   return (

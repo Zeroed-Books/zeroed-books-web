@@ -1,13 +1,13 @@
 import { Alert, Button, Container, PasswordInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { LockClosedIcon } from "@modulz/radix-icons";
+import { LockClosedIcon } from "@radix-ui/react-icons";
 import { AxiosError } from "axios";
 import React from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Navigate, useParams } from "react-router-dom";
 import InputError from "../InputError";
-import { createPasswordReset } from "./api";
+import useApiClient from "../api/useApiClient";
 
 interface PasswordResetError {
   new_password: string[];
@@ -16,10 +16,11 @@ interface PasswordResetError {
 
 const PasswordResetPage = () => {
   const { token } = useParams();
+  const client = useApiClient();
   const mutation = useMutation<void, AxiosError<PasswordResetError>, string>(
     async (password: string) => {
       if (token) {
-        await createPasswordReset({ new_password: password, token });
+        await client.createPasswordReset({ new_password: password, token });
       }
     },
     {

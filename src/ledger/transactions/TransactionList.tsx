@@ -10,10 +10,11 @@ import {
 } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
 import React, { useEffect } from "react";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { getTransactions, ResourceCollection, Transaction } from "./api";
 import { transactionKeys } from "../queries";
+import { Transaction, ResourceCollection } from "@/src/api/reps";
+import useApiClient from "@/src/api/useApiClient";
 
 interface DisplayTransactionListProps {
   loading: boolean;
@@ -29,14 +30,16 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
   if (showSkeleton) {
     return (
       <>
-        {[...Array(5).keys()].map((_, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Paper key={index} p="md" mb="lg" shadow="sm">
-            <Skeleton height={16} mb="md" width="30%" />
-            <Skeleton height={8} mb="sm" ml="xl" width="80%" />
-            <Skeleton height={8} mb="sm" ml="xl" width="80%" />
-          </Paper>
-        ))}
+        {Array(5)
+          .fill(0)
+          .map((_, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Paper key={index} p="md" mb="lg" shadow="sm">
+              <Skeleton height={16} mb="md" width="30%" />
+              <Skeleton height={8} mb="sm" ml="xl" width="80%" />
+              <Skeleton height={8} mb="sm" ml="xl" width="80%" />
+            </Paper>
+          ))}
       </>
     );
   }
@@ -81,8 +84,9 @@ interface Props {
 }
 
 const TransactionList: React.FC<Props> = ({ account }) => {
+  const client = useApiClient();
   const fetchTransactions = async ({ pageParam }: { pageParam?: string }) =>
-    getTransactions({ account, after: pageParam ?? undefined });
+    client.getTransactions({ account, after: pageParam });
 
   const listQuery = useInfiniteQuery<ResourceCollection<Transaction>>(
     transactionKeys.list(account),
@@ -108,6 +112,7 @@ const TransactionList: React.FC<Props> = ({ account }) => {
       listQuery.fetchNextPage();
     }
   }, [
+    listQuery,
     // Include `isFetching` so that if a page is fetched and the last element is
     // still in the viewport, the effect is triggered again.
     listQuery.isFetching,
