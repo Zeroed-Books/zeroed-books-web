@@ -1,16 +1,16 @@
 import { showNotification } from "@mantine/notifications";
-import { CheckCircledIcon } from "@modulz/radix-icons";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { AxiosError } from "axios";
 import React from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { transactionKeys } from "../queries";
+import TransactionForm, { useTransactionForm } from "./TransactionForm";
+import useApiClient from "@/src/api/useApiClient";
 import {
-  createTransaction,
   NewTransaction,
   Transaction,
   TransactionValidationError,
-} from "./api";
-import { transactionKeys } from "../queries";
-import TransactionForm, { useTransactionForm } from "./TransactionForm";
+} from "@/src/api/reps";
 
 const createErrorResponse = (error: AxiosError): TransactionValidationError => {
   if (error.response?.data) {
@@ -25,9 +25,10 @@ const createErrorResponse = (error: AxiosError): TransactionValidationError => {
 const NewTransactionForm = () => {
   const form = useTransactionForm();
 
+  const client = useApiClient();
   const queryClient = useQueryClient();
   const mutation = useMutation<Transaction, AxiosError, NewTransaction>(
-    createTransaction,
+    (newTransaction) => client.createTransaction(newTransaction),
     {
       onSuccess: () => {
         showNotification({

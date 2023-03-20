@@ -1,21 +1,23 @@
 import { Button } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { CrossCircledIcon, TrashIcon } from "@modulz/radix-icons";
+import { CrossCircledIcon, TrashIcon } from "@radix-ui/react-icons";
 import { AxiosError } from "axios";
 import React from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
-import { deleteTransaction, ResourceCollection, Transaction } from "./api";
 import { transactionKeys } from "../queries";
+import useApiClient from "@/src/api/useApiClient";
+import { ResourceCollection, Transaction } from "@/src/api/reps";
 
 interface Props {
   transaction: Transaction;
 }
 
 const DeleteTransactionButton: React.FC<Props> = ({ transaction }) => {
+  const client = useApiClient();
   const queryClient = useQueryClient();
   const mutation = useMutation<void, AxiosError>(
-    async () => deleteTransaction(transaction.id),
+    () => client.deleteTransaction(transaction.id),
     {
       onError: (error) => {
         const message =

@@ -1,16 +1,17 @@
 import { Loader, Paper, Text, Title } from "@mantine/core";
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { accountKeys } from "../queries";
-import { getAccountBalance } from "./api";
+import useApiClient from "@/src/api/useApiClient";
 
 interface Props {
   account: string;
 }
 
 const AccountBalance: React.FC<Props> = ({ account }) => {
+  const client = useApiClient();
   const query = useQuery(accountKeys.balance(account), async () =>
-    getAccountBalance(account)
+    client.getAccountBalance(account)
   );
 
   if (query.data && query.data.length > 0) {

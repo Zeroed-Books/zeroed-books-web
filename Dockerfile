@@ -1,31 +1,51 @@
-FROM golang:1.17.6 AS s3-copy
+FROM node:18-alpine AS base
 
-RUN GOPRIVATE='github.com/Zeroed-Books/*' CGO_ENABLED=0 go install github.com/Zeroed-Books/s3-copy@v0.1.1
-
-FROM node:16-bullseye AS builder
-
-WORKDIR /opt/zeroed-books-web
+# Install dependencies only when needed
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+#RUN apk add --no-cache libc6-compat
+WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Build the application
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
+# ENV NEXT_TELEMETRY_DISABLED 1
+
 RUN npm run build
 
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
 
-# The production image is a customized NGINX image that manipulates some
-# variables in "index.html" before serving the files as normal.
-FROM nginx:1.21 AS prod
+ENV NODE_ENV production
+# Uncomment the following line in case you want to disable telemetry during runtime.
+# ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY --from=s3-copy /go/bin/s3-copy /usr/local/bin/s3-copy
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Make sure we override the default server.
-COPY ./nginx/webapp.conf /etc/nginx/conf.d/default.conf.tpl
-COPY ./entrypoint.sh /entrypoint.sh
+COPY --from=builder /app/public ./public
 
-COPY --from=builder /opt/zeroed-books-web/dist/ /usr/share/nginx/html
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-ENTRYPOINT [ "/entrypoint.sh" ]
-CMD [ "serve" ]
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["node", "server.js"]

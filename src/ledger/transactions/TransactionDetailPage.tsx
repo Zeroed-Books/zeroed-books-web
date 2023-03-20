@@ -13,11 +13,12 @@ import {
 } from "@mantine/core";
 import dayjs from "dayjs";
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
-import { getTransaction, Transaction } from "./api";
 import DeleteTransactionButton from "./DeleteTransactionButton";
 import { transactionKeys } from "../queries";
+import { Transaction } from "@/src/api/reps";
+import useApiClient from "@/src/api/useApiClient";
 
 interface TransactionDetailDisplayProps {
   transaction: Transaction;
@@ -65,9 +66,10 @@ const TransactionDetailDisplay: React.FC<TransactionDetailDisplayProps> = ({
 
 const TransactionDetailPage = () => {
   const { transactionID } = useParams();
+  const client = useApiClient();
   const query = useQuery(transactionKeys.detail(transactionID), async () => {
     if (transactionID) {
-      return getTransaction(transactionID);
+      return client.getTransaction(transactionID);
     }
 
     throw new Error("No transaction ID provided.");
@@ -87,13 +89,11 @@ const TransactionDetailPage = () => {
         )}
       </Breadcrumbs>
 
-      {/* eslint-disable-next-line no-nested-ternary */}
       {query.isError ? (
         <Alert color="red" title="Error">
           Something went wrong loading the transaction.
         </Alert>
-      ) : // eslint-disable-next-line no-nested-ternary
-      query.isLoading ? (
+      ) : query.isLoading ? (
         <Center>
           <Loader size="xl" />
         </Center>

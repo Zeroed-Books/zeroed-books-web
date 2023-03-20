@@ -1,15 +1,15 @@
-import { Alert, Button, Group, LoadingOverlay, TextInput } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
-import { useForm, UseFormReturnType } from "@mantine/form";
-import { CrossCircledIcon } from "@modulz/radix-icons";
-import dayjs from "dayjs";
-import React, { useCallback } from "react";
-import AccountNameInput from "../accounts/AccountNameInput";
 import {
   NewTransaction,
   NewTransactionEntry,
   TransactionValidationError,
-} from "./api";
+} from "@/src/api/reps";
+import { Alert, Button, Group, LoadingOverlay, TextInput } from "@mantine/core";
+import { DateInput } from "@mantine/dates";
+import { useForm, UseFormReturnType } from "@mantine/form";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import dayjs from "dayjs";
+import React, { useCallback } from "react";
+import AccountNameInput from "../accounts/AccountNameInput";
 
 interface Props {
   error?: TransactionValidationError;
@@ -29,13 +29,15 @@ export const useTransactionForm = () =>
     initialValues: {
       date: new Date(),
       payee: "",
-      entries: [...Array(2).keys()].map(() => ({
-        account: "",
-        amount: {
-          currency: "USD",
-          value: "",
-        },
-      })),
+      entries: Array(2)
+        .fill(0)
+        .map(() => ({
+          account: "",
+          amount: {
+            currency: "USD",
+            value: "",
+          },
+        })),
     },
   });
 
@@ -111,7 +113,7 @@ const TransactionForm: React.FC<Props> = ({
         ...entries.slice(index + 1),
       ]);
     },
-    [formData.setFieldValue, formData.values.entries]
+    [formData]
   );
 
   return (
@@ -128,10 +130,10 @@ const TransactionForm: React.FC<Props> = ({
       )}
 
       <Group mb="sm">
-        <DatePicker
+        <DateInput
           clearable={false}
           disabled={loading}
-          firstDayOfWeek="sunday"
+          firstDayOfWeek={0}
           label="Date"
           required
           {...formData.getInputProps("date")}
@@ -148,7 +150,6 @@ const TransactionForm: React.FC<Props> = ({
         <EntryForm
           entry={entry}
           index={index}
-          // eslint-disable-next-line react/no-array-index-key
           key={index}
           loading={loading}
           onChange={handleEntryChange}
