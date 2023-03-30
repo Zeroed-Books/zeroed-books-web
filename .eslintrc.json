@@ -10,6 +10,8 @@
     // Prefer the "unused-imports" plugin which makes errors auto-fixable.
     "no-unused-vars": "off",
 
+    "@next/next/no-html-link-for-pages": "error",
+
     "import/no-anonymous-default-export": "error",
 
     "react-hooks/exhaustive-deps": "error",
