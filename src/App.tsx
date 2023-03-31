@@ -9,7 +9,6 @@ import NotFound from "./NotFound";
 import RequireAuth from "./authentication/RequireAuth";
 import { AuthProvider } from "./authentication/useAuthStatus";
 import CustomAppShell from "./CustomAppShell";
-import { ApiSettingsProvider } from "./api/useApiSettings";
 import "client-only";
 
 const AppLayout = () => (
@@ -77,11 +76,7 @@ const AppRoutes = () => (
 
 const queryClient = new QueryClient();
 
-interface AppProps {
-  apiRoot: string;
-}
-
-const App = ({ apiRoot }: AppProps) => (
+const App = () => (
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <MantineProvider
@@ -97,11 +92,9 @@ const App = ({ apiRoot }: AppProps) => (
             </Center>
           }
         >
-          <ApiSettingsProvider apiRoot={apiRoot}>
-            <AuthProvider>
-              <AppRoutes />
-            </AuthProvider>
-          </ApiSettingsProvider>
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
         </Suspense>
       </MantineProvider>
     </QueryClientProvider>
