@@ -2,8 +2,7 @@ import { withApiAuthRequired, getAccessToken } from "@auth0/nextjs-auth0";
 import httpProxy from "http-proxy";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-// const API_ROOT = process.env.API_ROOT;
-const API_ROOT = "http://host.docker.internal:8000";
+const API_ROOT = process.env.API_ROOT;
 
 const proxy = httpProxy.createProxyServer();
 
