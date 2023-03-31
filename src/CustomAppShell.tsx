@@ -1,4 +1,3 @@
-import ExternalLink from "@/components/ExternalLink";
 import {
   AppShell,
   Navbar,
@@ -139,7 +138,6 @@ const CustomAppShell = ({ children }: Props) => {
       }
     >
       {children}
-      <ExternalLink href="/api/auth/login">Auth0 Log In</ExternalLink>
     </AppShell>
   );
 };
