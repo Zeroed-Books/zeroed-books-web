@@ -1,3 +1,5 @@
+"use client";
+
 import { Container, Title } from "@mantine/core";
 import React from "react";
 import NewTransactionForm from "./ledger/transactions/NewTransactionForm";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { Center, Loader, MantineProvider } from "@mantine/core";
+import { Center, Loader } from "@mantine/core";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
@@ -9,7 +9,6 @@ import NotFound from "./NotFound";
 import RequireAuth from "./authentication/RequireAuth";
 import { AuthProvider } from "./authentication/useAuthStatus";
 import CustomAppShell from "./CustomAppShell";
-import "client-only";
 
 const AppLayout = () => (
   // Add a suspence boundary inside the app shell so that page loads after the
@@ -48,9 +47,6 @@ const LazyPasswordResetRequest = React.lazy(
 const LazyPasswordResetRequestSent = React.lazy(
   () => import("./identities/PasswordResetRequestSentPage")
 );
-const LazyTransactionDetail = React.lazy(
-  () => import("./ledger/transactions/TransactionDetailPage")
-);
 
 const AppRoutes = () => (
   <Routes>
@@ -58,10 +54,6 @@ const AppRoutes = () => (
       <Route element={<RequireAuthForTree />}>
         <Route index element={<LazyHome />} />
         <Route path="accounts/:accountName" element={<LazyAccountDetail />} />
-        <Route
-          path="transactions/:transactionID"
-          element={<LazyTransactionDetail />}
-        />
       </Route>
       <Route path="login" element={<LazyLogin />} />
       <Route path="reset-your-password">
@@ -79,24 +71,18 @@ const queryClient = new QueryClient();
 const App = () => (
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
-      <MantineProvider
-        theme={{ primaryColor: "green" }}
-        withGlobalStyles
-        withNormalizeCSS
+      <Notifications />
+      <Suspense
+        fallback={
+          <Center style={{ height: "200px", width: "100%" }}>
+            <Loader size="xl" />
+          </Center>
+        }
       >
-        <Notifications />
-        <Suspense
-          fallback={
-            <Center style={{ height: "200px", width: "100%" }}>
-              <Loader size="xl" />
-            </Center>
-          }
-        >
-          <AuthProvider>
-            <AppRoutes />
-          </AuthProvider>
-        </Suspense>
-      </MantineProvider>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </Suspense>
     </QueryClientProvider>
   </BrowserRouter>
 );

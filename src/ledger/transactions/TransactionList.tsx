@@ -11,7 +11,7 @@ import {
 import { useIntersection } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { transactionKeys } from "../queries";
 import { Transaction, ResourceCollection } from "@/src/api/reps";
 import useApiClient from "@/src/api/useApiClient";
@@ -50,7 +50,7 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
           <div>
             <Text>
               {transaction.date} &mdash;{" "}
-              <Anchor component={Link} to={`/transactions/${transaction.id}`}>
+              <Anchor component={Link} href={`/transactions/${transaction.id}`}>
                 {transaction.payee}
               </Anchor>
             </Text>
@@ -62,7 +62,7 @@ const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
               <Anchor
                 component={Link}
                 ml="lg"
-                to={`/accounts/${entry.account}`}
+                href={`/accounts/${entry.account}`}
                 style={{ flexGrow: 1 }}
               >
                 {entry.account}
