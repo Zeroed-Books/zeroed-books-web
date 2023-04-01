@@ -5,6 +5,7 @@
 .vscode/
 node_modules/
 .dockerignore
+.env.local
 .eslintrc.json
 .gitignore
 .lintstagedrc.json
