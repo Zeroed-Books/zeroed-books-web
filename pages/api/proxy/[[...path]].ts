@@ -16,9 +16,17 @@ export default withApiAuthRequired(async function proxyApiRequest(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { accessToken } = await getAccessToken(req, res, {
-    scopes: ["openid", "profile", "email"],
-  });
+  let accessToken: string | undefined = undefined;
+  try {
+    const token = await getAccessToken(req, res, {
+      scopes: ["openid", "profile", "email"],
+    });
+    accessToken = token.accessToken;
+  } catch (e) {
+    if ((e as any)?.code === "ERR_EXPIRED_ACCESS_TOKEN") {
+      // Ignore
+    }
+  }
 
   return new Promise<void>((resolve, reject) => {
     req.url = req.url?.replace("/api/proxy", "");
