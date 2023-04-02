@@ -1,82 +1,13 @@
-import {
-  Anchor,
-  Center,
-  Divider,
-  Group,
-  Loader,
-  Paper,
-  Skeleton,
-  Text,
-} from "@mantine/core";
+"use client";
+
+import { Center, Divider, Loader, Text } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import Link from "next/link";
 import { transactionKeys } from "../queries";
 import { Transaction, ResourceCollection } from "@/src/api/reps";
 import useApiClient from "@/src/api/useApiClient";
-
-interface DisplayTransactionListProps {
-  loading: boolean;
-  transactions: Transaction[];
-}
-
-const DisplayTransactionList: React.FC<DisplayTransactionListProps> = ({
-  loading,
-  transactions,
-}) => {
-  const showSkeleton = loading && transactions.length === 0;
-
-  if (showSkeleton) {
-    return (
-      <>
-        {Array(5)
-          .fill(0)
-          .map((_, index) => (
-            <Paper key={index} p="md" mb="lg" shadow="sm">
-              <Skeleton height={16} mb="md" width="30%" />
-              <Skeleton height={8} mb="sm" ml="xl" width="80%" />
-              <Skeleton height={8} mb="sm" ml="xl" width="80%" />
-            </Paper>
-          ))}
-      </>
-    );
-  }
-
-  return (
-    <>
-      {transactions.map((transaction) => (
-        <Paper key={transaction.id} mb="lg" p="md" shadow="sm">
-          <div>
-            <Text>
-              {transaction.date} &mdash;{" "}
-              <Anchor component={Link} href={`/transactions/${transaction.id}`}>
-                {transaction.payee}
-              </Anchor>
-            </Text>
-          </div>
-          {transaction.entries.map((entry) => (
-            <Group
-              key={`${entry.account}-${entry.amount.currency}-${entry.amount.value}`}
-            >
-              <Anchor
-                component={Link}
-                ml="lg"
-                href={`/accounts/${entry.account}`}
-                style={{ flexGrow: 1 }}
-              >
-                {entry.account}
-              </Anchor>
-              <Text>
-                {entry.amount.currency} {entry.amount.value}
-              </Text>
-            </Group>
-          ))}
-        </Paper>
-      ))}
-    </>
-  );
-};
+import NewTransactionList from "@/components/transactions/TransactionList";
 
 interface Props {
   account?: string;
@@ -118,15 +49,17 @@ const TransactionList: React.FC<Props> = ({ account }) => {
     observer?.isIntersecting,
   ]);
 
+  const transactions = listQuery.data?.pages?.reduce(
+    (transactions: Transaction[], page) => {
+      transactions.push(...(page.items ?? []));
+      return transactions;
+    },
+    []
+  );
+
   return (
     <>
-      {listQuery.data?.pages?.map((page, i) => (
-        <DisplayTransactionList
-          key={`${i}-${page.next}`}
-          loading={listQuery.isFetching}
-          transactions={page?.items ?? []}
-        />
-      ))}
+      <NewTransactionList transactions={transactions ?? []} />
 
       <Divider mx="xl" my="lg" ref={loadMoreRef} />
 

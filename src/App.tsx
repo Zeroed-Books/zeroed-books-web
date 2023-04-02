@@ -33,9 +33,6 @@ const RequireAuthForTree = () => (
   </RequireAuth>
 );
 
-const LazyAccountDetail = React.lazy(
-  () => import("./ledger/accounts/AccountDetailPage")
-);
 const LazyHome = React.lazy(() => import("./HomePage"));
 const LazyLogin = React.lazy(() => import("./authentication/LoginPage"));
 const LazyPasswordReset = React.lazy(
@@ -53,7 +50,6 @@ const AppRoutes = () => (
     <Route path="/" element={<AppLayout />}>
       <Route element={<RequireAuthForTree />}>
         <Route index element={<LazyHome />} />
-        <Route path="accounts/:accountName" element={<LazyAccountDetail />} />
       </Route>
       <Route path="login" element={<LazyLogin />} />
       <Route path="reset-your-password">

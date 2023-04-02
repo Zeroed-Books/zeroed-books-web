@@ -2,7 +2,7 @@ import { handleAuth, handleLogin } from "@auth0/nextjs-auth0";
 
 const authorizationParams = {
   audience: "https://api.zeroedbooks.com/",
-  scope: "openid profile email",
+  scope: "offline_access openid profile email",
 };
 
 export default handleAuth({

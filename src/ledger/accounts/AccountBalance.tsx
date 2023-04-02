@@ -1,3 +1,5 @@
+"use client";
+
 import { Loader, Paper, Text, Title } from "@mantine/core";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";

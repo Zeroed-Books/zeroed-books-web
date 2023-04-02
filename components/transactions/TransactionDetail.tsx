@@ -5,7 +5,7 @@ import useApiClient from "@/src/api/useApiClient";
 import { transactionKeys } from "@/src/ledger/queries";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import Link from "next/link";
+import TextLink from "@/components/TextLink";
 import DeleteTransactionButton from "./DeleteTransactionButton";
 import Breadcrumbs from "../Breadcrumbs";
 
@@ -22,9 +22,7 @@ const TransactionDetailDisplay = ({
     <div className="mx-auto max-w-4xl">
       <Breadcrumbs>
         <Breadcrumbs.Child>
-          <Link className="text-green-600 underline" href="/">
-            Home
-          </Link>
+          <TextLink href="/">Home</TextLink>
         </Breadcrumbs.Child>
         <Breadcrumbs.Child>
           <span>Transactions</span>
@@ -52,14 +50,11 @@ const TransactionDetailDisplay = ({
               key={`${entry.account}-${entry.amount.currency}-${entry.amount.value}`}
             >
               <td className="w-full">
-                <Link
-                  className="text-green-600 underline"
-                  href={`/accounts/${entry.account}`}
-                >
+                <TextLink href={`/accounts/${entry.account}`}>
                   {entry.account}
-                </Link>
+                </TextLink>
               </td>
-              <td className="px-4 font-mono">{entry.amount.currency}</td>
+              <td className="px-2 font-mono">{entry.amount.currency}</td>
               <td className="text-right font-mono">{entry.amount.value}</td>
             </tr>
           ))}
