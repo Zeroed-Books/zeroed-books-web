@@ -30,7 +30,7 @@ export default function AppShell({ children }: Props) {
         </ul>
         <ConditionalLogoutLink />
       </nav>
-      <section className="flex-grow p-4">{children}</section>
+      <section className="flex-grow overflow-auto p-4">{children}</section>
     </section>
   );
 }
