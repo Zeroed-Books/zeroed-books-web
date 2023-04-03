@@ -6,3 +6,7 @@ next-env.d.ts
 
 # Local config
 *.local
+
+# Sentry
+.sentryclirc
+sentry.properties

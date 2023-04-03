@@ -46,6 +46,9 @@ USER nextjs
 
 EXPOSE 3000
 
+ARG RELEASE_TAG=development
+
+ENV SENTRY_RELEASE=${RELEASE_TAG}
 ENV PORT 3000
 
 CMD ["node", "server.js"]
