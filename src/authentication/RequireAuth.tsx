@@ -1,7 +1,9 @@
+"use client";
+
 import React from "react";
-import { useLocation } from "react-router-dom";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Center, Loader } from "@mantine/core";
+import { usePathname } from "next/navigation";
 
 interface Props {
   children: JSX.Element;
@@ -9,10 +11,10 @@ interface Props {
 
 const RequireAuth: React.FC<Props> = ({ children }) => {
   const { isLoading, user } = useUser();
-  const location = useLocation();
+  const pathname = usePathname();
 
   if (!user && !isLoading) {
-    window.location.replace(`/api/auth/login?returnTo=${location.pathname}`);
+    window.location.replace(`/api/auth/login?returnTo=${pathname}`);
 
     return null;
   }

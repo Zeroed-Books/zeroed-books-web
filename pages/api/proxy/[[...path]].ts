@@ -1,4 +1,9 @@
-import { withApiAuthRequired, getAccessToken } from "@auth0/nextjs-auth0";
+import {
+  AuthError,
+  AccessTokenErrorCode,
+  withApiAuthRequired,
+  getAccessToken,
+} from "@auth0/nextjs-auth0";
 import httpProxy from "http-proxy";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -23,7 +28,7 @@ export default withApiAuthRequired(async function proxyApiRequest(
     });
     accessToken = token.accessToken;
   } catch (e) {
-    if ((e as any)?.code === "ERR_EXPIRED_ACCESS_TOKEN") {
+    if ((e as AuthError)?.code === AccessTokenErrorCode.MISSING_ACCESS_TOKEN) {
       // Ignore
     }
   }

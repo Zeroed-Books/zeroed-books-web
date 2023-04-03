@@ -1,15 +1,17 @@
+"use client";
+
 import {
   NewTransaction,
   NewTransactionEntry,
   TransactionValidationError,
 } from "@/src/api/reps";
-import { Alert, Button, Group, LoadingOverlay, TextInput } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
+import { Alert, Group } from "@mantine/core";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
 import React, { useCallback } from "react";
 import AccountNameInput from "../accounts/AccountNameInput";
+import LabeledInput from "../inputs/LabeledInput";
 
 interface Props {
   error?: TransactionValidationError;
@@ -61,16 +63,18 @@ const EntryForm: React.FC<EntryFormProps> = ({
       onChange={(newValue) => onChange(index, { ...entry, account: newValue })}
       value={entry.account}
     />
-    <TextInput
+    <LabeledInput
       disabled={loading}
-      icon="$"
       label="Amount"
+      name="amount"
       onChange={(e) =>
         onChange(index, {
           ...entry,
           amount: { currency: "USD", value: e.currentTarget.value },
         })
       }
+      step="0.01"
+      type="number"
       value={entry.amount?.value ?? ""}
     />
   </Group>
@@ -121,31 +125,30 @@ const TransactionForm: React.FC<Props> = ({
       onSubmit={formData.onSubmit(handleSubmit)}
       style={{ position: "relative" }}
     >
-      <LoadingOverlay visible={loading} />
-
       {error?.message && (
         <Alert color="red" icon={<CrossCircledIcon />} mb="lg" title="Error">
           {error.message}
         </Alert>
       )}
 
-      <Group mb="sm">
-        <DateInput
-          clearable={false}
+      <div className="flex gap-4">
+        <LabeledInput
           disabled={loading}
-          firstDayOfWeek={0}
           label="Date"
           required
+          type="date"
           {...formData.getInputProps("date")}
+          value={dayjs(formData.values.date).format("YYYY-MM-DD")}
         />
-        <TextInput
-          disabled={loading}
-          label="Payee"
-          required
-          sx={{ flexGrow: 1 }}
-          {...formData.getInputProps("payee")}
-        />
-      </Group>
+        <div className="flex-grow">
+          <LabeledInput
+            disabled={loading}
+            label="Payee"
+            required
+            {...formData.getInputProps("payee")}
+          />
+        </div>
+      </div>
       {formData.values.entries.map((entry, index) => (
         <EntryForm
           entry={entry}
@@ -155,11 +158,15 @@ const TransactionForm: React.FC<Props> = ({
           onChange={handleEntryChange}
         />
       ))}
-      <Group position="right">
-        <Button disabled={loading} loading={loading} type="submit">
+      <div className="flex justify-end">
+        <button
+          className="bg-green-500 px-4 py-2 text-white hover:bg-green-600 disabled:bg-green-400"
+          disabled={loading}
+          type="submit"
+        >
           Create
-        </Button>
-      </Group>
+        </button>
+      </div>
     </form>
   );
 };
