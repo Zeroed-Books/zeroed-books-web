@@ -40,6 +40,8 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "2.4.0",
+    "@headlessui/react": "1.7.13",
+    "@headlessui/tailwindcss": "0.1.2",
     "@mantine/core": "6.0.2",
     "@mantine/dates": "6.0.2",
     "@mantine/form": "6.0.2",
@@ -58,7 +60,6 @@
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-router-dom": "6.4.3",
     "typescript": "5.0.2"
   }
 }
