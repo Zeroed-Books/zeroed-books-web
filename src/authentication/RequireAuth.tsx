@@ -6,10 +6,10 @@ import { Center, Loader } from "@mantine/core";
 import { usePathname } from "next/navigation";
 
 interface Props {
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
-const RequireAuth: React.FC<Props> = ({ children }) => {
+export default function RequireAuth({ children }: Props) {
   const { isLoading, user } = useUser();
   const pathname = usePathname();
 
@@ -25,7 +25,5 @@ const RequireAuth: React.FC<Props> = ({ children }) => {
     </Center>;
   }
 
-  return children;
-};
-
-export default RequireAuth;
+  return <>{children}</>;
+}
