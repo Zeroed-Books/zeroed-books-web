@@ -1,5 +1,6 @@
 export const accountKeys = {
   all: ["accounts"] as const,
+  active: ["active-accounts"] as const,
   balances: () => [...accountKeys.all, "balances"] as const,
   balance: (name?: string) => [...accountKeys.balances(), name] as const,
   details: () => [...accountKeys.all, "details"] as const,

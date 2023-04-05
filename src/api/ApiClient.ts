@@ -54,6 +54,13 @@ class ApiClient {
     return response.data;
   }
 
+  public async getActiveAccounts(): Promise<string[]> {
+    const path = "/ledger/active-accounts";
+    const response = await this.client.get<string[]>(path);
+
+    return response.data;
+  }
+
   public async getPopularAccounts(search?: string): Promise<string[]> {
     const path = ApiClient.Paths.ACCOUNTS;
     const params: { query?: string } = {};
