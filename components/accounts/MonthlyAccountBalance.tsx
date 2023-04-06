@@ -62,13 +62,14 @@ export default function MonthlyAccountBalance({ account }: Props) {
           }
 
           months.push({
+            month: parsedMonth,
             name: displayMonth,
             balance: usd.value,
             displayBalance: displayValue,
           });
         }
 
-        months.sort((a, b) => a.name.localeCompare(b.name));
+        months.sort((a, b) => a.month.getTime() - b.month.getTime());
 
         return months;
       },
