@@ -54,6 +54,15 @@ class ApiClient {
     return response.data;
   }
 
+  public async getAccountBalanceMonthly(
+    account: string
+  ): Promise<Record<string, AccountBalance[]>> {
+    const path = `${ApiClient.Paths.ACCOUNTS}/${account}/balance/monthly`;
+    const response = await this.client.get(path);
+
+    return response.data;
+  }
+
   public async getActiveAccounts(): Promise<string[]> {
     const path = "/ledger/active-accounts";
     const response = await this.client.get<string[]>(path);

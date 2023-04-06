@@ -1,4 +1,5 @@
 import AccountBalance from "@/components/accounts/AccountBalance";
+import MonthlyAccountBalance from "@/components/accounts/MonthlyAccountBalance";
 import TransactionList from "@/src/ledger/transactions/TransactionList";
 import React from "react";
 
@@ -27,6 +28,12 @@ export default function AccountDetailPage({ params }: Props) {
       </h1>
       <div className="lg:grid lg:grid-cols-3">
         <AccountBalance account={accountName} />
+      </div>
+      <div className="mb-4 lg:h-96">
+        <h2 className="mb-4 text-2xl">Monthly Balance</h2>
+        <div className="h-[28rem] lg:h-96">
+          <MonthlyAccountBalance account={accountName} />
+        </div>
       </div>
       <h2 className="mb-4 text-2xl">Transactions</h2>
       <TransactionList account={accountName} />
