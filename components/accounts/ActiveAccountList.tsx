@@ -20,7 +20,9 @@ export default function ActiveAccountList() {
       <ul>
         {query.data.map((account) => (
           <li key={account}>
-            <TextLink href={`/accounts/${account}`}>{account}</TextLink>
+            <TextLink href={`/application/accounts/${account}`}>
+              {account}
+            </TextLink>
           </li>
         ))}
       </ul>

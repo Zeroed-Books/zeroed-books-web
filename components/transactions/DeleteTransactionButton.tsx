@@ -55,7 +55,7 @@ export default function DeleteTransactionButton({ transaction }: Props) {
           queryClient.setQueryData(transactionKeys.list(), updatedTransactions);
         }
 
-        router.push("/");
+        router.push("/application");
       },
     }
   );

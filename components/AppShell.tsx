@@ -12,7 +12,7 @@ export default function AppShell({ children }: Props) {
     <section className="flex h-screen flex-col md:grid md:grid-cols-app-shell md:grid-rows-app-shell">
       <Link
         className="bg-green-500 px-4 py-2 text-lg font-semibold hover:underline md:text-2xl"
-        href="/"
+        href="/?noAuthRedirect=true"
       >
         Zeroed Books
       </Link>
@@ -20,12 +20,12 @@ export default function AppShell({ children }: Props) {
       <nav className="flex flex-col bg-gray-100 shadow">
         <ul className="md:flex-grow">
           <li>
-            <NavLink exact href="/">
+            <NavLink exact href="/application">
               Home
             </NavLink>
           </li>
           <li>
-            <NavLink href="/accounts">Accounts</NavLink>
+            <NavLink href="/application/accounts">Accounts</NavLink>
           </li>
         </ul>
         <ConditionalLogoutLink />
