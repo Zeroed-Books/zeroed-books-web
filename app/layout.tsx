@@ -1,3 +1,4 @@
+import "./global.css";
 import ClientProviders from "@/components/ClientProviders";
 
 export const metadata = {

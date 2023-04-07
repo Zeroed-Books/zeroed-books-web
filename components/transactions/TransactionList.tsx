@@ -22,7 +22,7 @@ export default function TransactionList({ transactions }: Props) {
             <tr>
               <td>{transaction.date}</td>
               <td className="w-full">
-                <TextLink href={`/transactions/${transaction.id}`}>
+                <TextLink href={`/application/transactions/${transaction.id}`}>
                   {transaction.payee}
                 </TextLink>
               </td>
@@ -33,7 +33,7 @@ export default function TransactionList({ transactions }: Props) {
               >
                 <td />
                 <td>
-                  <TextLink href={`/accounts/${entry.account}`}>
+                  <TextLink href={`/application/accounts/${entry.account}`}>
                     {entry.account}
                   </TextLink>
                 </td>

@@ -22,7 +22,7 @@ const TransactionDetailDisplay = ({
     <div className="mx-auto max-w-4xl">
       <Breadcrumbs>
         <Breadcrumbs.Child>
-          <TextLink href="/">Home</TextLink>
+          <TextLink href="/application">Home</TextLink>
         </Breadcrumbs.Child>
         <Breadcrumbs.Child>
           <span>Transactions</span>
@@ -50,7 +50,7 @@ const TransactionDetailDisplay = ({
               key={`${entry.account}-${entry.amount.currency}-${entry.amount.value}`}
             >
               <td className="w-full">
-                <TextLink href={`/accounts/${entry.account}`}>
+                <TextLink href={`/application/accounts/${entry.account}`}>
                   {entry.account}
                 </TextLink>
               </td>
