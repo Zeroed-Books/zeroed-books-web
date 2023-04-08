@@ -4,7 +4,7 @@ import useMedia from "@/responsive/useMedia";
 import useApiClient from "@/src/api/useApiClient";
 import { accountKeys } from "@/src/ledger/queries";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
   Bar,
   BarChart,
@@ -54,17 +54,19 @@ export default function MonthlyAccountBalance({ account }: Props) {
             continue;
           }
 
-          let displayValue: string;
+          let parsedValue: number;
           try {
-            displayValue = numberFormatter.format(parseFloat(usd.value));
+            parsedValue = parseFloat(usd.value);
           } catch (e) {
             continue;
           }
 
+          const displayValue = numberFormatter.format(parsedValue);
+
           months.push({
             month: parsedMonth,
             name: displayMonth,
-            balance: usd.value,
+            balance: parsedValue,
             displayBalance: displayValue,
           });
         }
@@ -76,16 +78,23 @@ export default function MonthlyAccountBalance({ account }: Props) {
     }
   );
 
-  const tryFormatMoney = (value: string) => {
-    try {
-      const parsed = parseFloat(value);
-      const formatted = numberFormatter.format(parsed);
+  const tryFormatMoney = useCallback(
+    (value: string | number) => {
+      let parsed: number;
+      if (typeof value === "number") {
+        parsed = value;
+      } else {
+        try {
+          parsed = parseFloat(value);
+        } catch (e) {
+          return value;
+        }
+      }
 
-      return `$${formatted}`;
-    } catch (e) {
-      return value;
-    }
-  };
+      return `$${numberFormatter.format(parsed)}`;
+    },
+    [numberFormatter]
+  );
 
   const layout = useMedia<LayoutType>(
     [{ query: "(min-width: 1024px)", matchingValue: "horizontal" }],
