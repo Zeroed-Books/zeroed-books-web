@@ -1,95 +1,73 @@
-"use client";
-
 import {
   NewTransaction,
   NewTransactionEntry,
+  Transaction,
   TransactionValidationError,
 } from "@/src/api/reps";
-import { Alert, Group } from "@mantine/core";
-import { useForm, UseFormReturnType } from "@mantine/form";
-import { CrossCircledIcon } from "@radix-ui/react-icons";
-import dayjs from "dayjs";
 import React, { useCallback } from "react";
+import { Control, Controller, UseFormRegister } from "react-hook-form";
 import AccountNameInput from "../accounts/AccountNameInput";
-import LabeledInput from "../inputs/LabeledInput";
-
-interface Props {
-  error?: TransactionValidationError;
-  formData: UseFormReturnType<FormData>;
-  loading: boolean;
-  onSubmit: (transaction: NewTransaction) => void;
-}
-
-interface FormData {
-  date: Date;
-  payee: string;
-  entries: NewTransactionEntry[];
-}
-
-export const useTransactionForm = () =>
-  useForm<FormData>({
-    initialValues: {
-      date: new Date(),
-      payee: "",
-      entries: Array(2)
-        .fill(0)
-        .map(() => ({
-          account: "",
-          amount: {
-            currency: "USD",
-            value: "",
-          },
-        })),
-    },
-  });
+import {
+  TransactionFormData,
+  UseTransactionFormType,
+} from "./useTransactionForm";
+import FormInput from "../forms/FormInput";
+import FormError from "../forms/FormError";
 
 interface EntryFormProps {
+  control: Control<TransactionFormData>;
   entry: NewTransactionEntry;
   index: number;
   loading: boolean;
-  onChange: (index: number, entry: NewTransactionEntry) => void;
+  register: UseFormRegister<TransactionFormData>;
 }
 
 const EntryForm: React.FC<EntryFormProps> = ({
-  entry,
+  control,
   index,
   loading,
-  onChange,
+  register,
 }) => (
-  <Group ml="lg" mb="sm">
-    <AccountNameInput
-      disabled={loading}
-      label="Account"
-      onChange={(newValue) => onChange(index, { ...entry, account: newValue })}
-      value={entry.account}
+  <div className="mb-2 ml-4 inline-block md:inline-flex md:space-x-4">
+    <Controller
+      control={control}
+      name={`entries.${index}.account`}
+      render={({ field }) => (
+        <AccountNameInput
+          disabled={loading}
+          label="Account"
+          onChange={field.onChange}
+          value={field.value}
+        />
+      )}
     />
-    <LabeledInput
+    <FormInput
       disabled={loading}
       label="Amount"
-      name="amount"
-      onChange={(e) =>
-        onChange(index, {
-          ...entry,
-          amount: { currency: "USD", value: e.currentTarget.value },
-        })
-      }
       step="0.01"
       type="number"
-      value={entry.amount?.value ?? ""}
+      {...register(`entries.${index}.amount.value`)}
     />
-  </Group>
+  </div>
 );
 
-const TransactionForm: React.FC<Props> = ({
-  error,
-  formData,
-  loading,
-  onSubmit,
-}) => {
-  const handleSubmit = useCallback(
-    (data: FormData) => {
+interface Props {
+  error?: TransactionValidationError;
+  form: UseTransactionFormType;
+  loading: boolean;
+  onSubmit: (transaction: NewTransaction) => void;
+  transaction?: Transaction;
+}
+
+export default function TransactionForm({ form, loading, onSubmit }: Props) {
+  const {
+    formState: { errors },
+  } = form;
+
+  const submitFilteredData = useCallback(
+    (data: TransactionFormData) => {
       onSubmit({
-        date: dayjs(data.date).format("YYYY-MM-DD"),
+        date: data.date,
         payee: data.payee,
         notes: "",
         entries: data.entries
@@ -108,56 +86,46 @@ const TransactionForm: React.FC<Props> = ({
     [onSubmit]
   );
 
-  const handleEntryChange = useCallback(
-    (index: number, entry: NewTransactionEntry) => {
-      const { entries } = formData.values;
-      formData.setFieldValue("entries", [
-        ...entries.slice(0, index),
-        entry,
-        ...entries.slice(index + 1),
-      ]);
-    },
-    [formData]
-  );
-
   return (
-    <form
-      onSubmit={formData.onSubmit(handleSubmit)}
-      style={{ position: "relative" }}
-    >
-      {error?.message && (
-        <Alert color="red" icon={<CrossCircledIcon />} mb="lg" title="Error">
-          {error.message}
-        </Alert>
-      )}
+    <form onSubmit={form.handleSubmit(submitFilteredData)}>
+      <FormError message={errors.root?.serverError?.message} />
 
-      <div className="flex gap-4">
-        <LabeledInput
-          disabled={loading}
-          label="Date"
-          required
-          type="date"
-          {...formData.getInputProps("date")}
-          value={dayjs(formData.values.date).format("YYYY-MM-DD")}
-        />
-        <div className="flex-grow">
-          <LabeledInput
+      <div className="mb-2 flex gap-4">
+        <div>
+          <FormInput
             disabled={loading}
+            error={errors.date}
+            label="Date"
+            type="date"
+            {...form.register("date", { required: true })}
+          />
+        </div>
+        <div className="flex-grow">
+          <FormInput
+            disabled={loading}
+            error={errors.payee}
             label="Payee"
-            required
-            {...formData.getInputProps("payee")}
+            {...form.register("payee", { required: true })}
           />
         </div>
       </div>
-      {formData.values.entries.map((entry, index) => (
-        <EntryForm
-          entry={entry}
-          index={index}
-          key={index}
-          loading={loading}
-          onChange={handleEntryChange}
-        />
-      ))}
+      <h3 className="mb-2 text-xl">Entries:</h3>
+      <ol className="[counter-reset:section]">
+        {form.entries.fields.map((field, index) => (
+          <li
+            className="align-text-top [counter-increment:section] before:align-top before:content-[counter(section)_'.']"
+            key={field.id}
+          >
+            <EntryForm
+              control={form.control}
+              entry={field}
+              index={index}
+              loading={loading}
+              register={form.register}
+            />
+          </li>
+        ))}
+      </ol>
       <div className="flex justify-end">
         <button
           className="bg-green-500 px-4 py-2 text-white hover:bg-green-600 disabled:bg-green-400"
@@ -169,6 +137,4 @@ const TransactionForm: React.FC<Props> = ({
       </div>
     </form>
   );
-};
-
-export default TransactionForm;
+}

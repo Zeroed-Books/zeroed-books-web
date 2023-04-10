@@ -30,6 +30,7 @@ export default withApiAuthRequired(async function proxyApiRequest(
   } catch (e) {
     if ((e as AuthError)?.code === AccessTokenErrorCode.MISSING_ACCESS_TOKEN) {
       // Ignore
+    } else {
     }
   }
 

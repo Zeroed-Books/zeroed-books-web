@@ -11,7 +11,7 @@
     "style:check": "prettier --check .",
     "style:fix": "prettier --write .",
     "prepare": "husky install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -24,16 +24,22 @@
   },
   "homepage": "https://github.com/Zeroed-Books/zeroed-books-web#readme",
   "devDependencies": {
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "14.0.0",
+    "@testing-library/user-event": "14.4.3",
     "@typescript-eslint/eslint-plugin": "5.57.1",
     "@typescript-eslint/parser": "5.57.1",
+    "@vitejs/plugin-react": "3.1.0",
     "eslint": "8.37.0",
     "eslint-config-next": "13.3.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-unused-imports": "2.0.0",
     "husky": "8.0.3",
+    "jsdom": "21.1.1",
     "lint-staged": "13.2.1",
     "prettier": "2.8.7",
-    "prettier-plugin-tailwindcss": "0.2.7"
+    "prettier-plugin-tailwindcss": "0.2.7",
+    "vitest": "0.29.8"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "2.4.0",
@@ -56,9 +62,11 @@
     "dayjs": "1.11.7",
     "http-proxy": "1.18.1",
     "next": "13.3.0",
+    "nock": "13.3.0",
     "postcss": "8.4.21",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "7.43.9",
     "recharts": "2.5.0",
     "tailwindcss": "3.3.1",
     "typescript": "5.0.3"
