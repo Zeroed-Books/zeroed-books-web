@@ -1,6 +1,7 @@
 import nock from "nock";
+import { describe, beforeEach, afterEach, expect, it } from "vitest";
 import ApiClient from "./ApiClient";
-import { AccountBalance, Credentials } from "./reps";
+import { AccountBalance } from "./reps";
 
 describe("ApiClient", () => {
   const apiRoot = "http://localhost";
@@ -74,18 +75,6 @@ describe("ApiClient", () => {
 
         expect(gotData).toMatchObject(accounts);
       });
-    });
-  });
-
-  describe("Authentication", () => {
-    describe("createCookieSession", () => {
-      const path = "/authentication/cookieSessions";
-      const credentials: Credentials = {
-        email: "test@example.com",
-        password: "password",
-      };
-
-      scope.post(path, credentials).reply(201);
     });
   });
 });

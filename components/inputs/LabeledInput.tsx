@@ -13,7 +13,7 @@ export default forwardRef<HTMLInputElement, Props>(function LabeledInput(
   const id = useId();
 
   return (
-    <div className="mb-2">
+    <div className="mb-1">
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <BaseInput id={id} {...rest} ref={ref} />
     </div>
