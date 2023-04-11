@@ -3,6 +3,7 @@
 .husky/
 .next/
 .vscode/
+coverage/
 node_modules/
 .dockerignore
 .env.local
