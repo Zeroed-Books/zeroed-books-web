@@ -10,3 +10,6 @@ next-env.d.ts
 # Sentry
 .sentryclirc
 sentry.properties
+
+# Coverage reports
+coverage

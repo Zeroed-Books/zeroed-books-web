@@ -20,6 +20,10 @@ export default defineConfig({
   plugins: [react()],
   resolve: { alias },
   test: {
+    coverage: {
+      all: true,
+      exclude: [".next/", "coverage/", "**/*.config.{js,ts}", ".*.{js,ts}"],
+    },
     environment: "jsdom",
     setupFiles: ["vitest.setup.ts"],
   },
