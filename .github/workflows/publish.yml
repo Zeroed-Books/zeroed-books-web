@@ -10,9 +10,15 @@ env:
   IMAGE_NAME: web
 
 jobs:
+  review:
+    uses: ./.github/workflows/review.yml
+
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
+    needs:
+      - review
+
     runs-on: ubuntu-latest
     permissions:
       packages: write
