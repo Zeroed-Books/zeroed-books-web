@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import TextLink from "@/components/TextLink";
 import DeleteTransactionButton from "./DeleteTransactionButton";
 import Breadcrumbs from "../Breadcrumbs";
+import formatCurrency from "@/currency/formatCurrency";
 
 interface TransactionDetailDisplayProps {
   transaction: Transaction;
@@ -45,19 +46,28 @@ const TransactionDetailDisplay = ({
 
       <table className="w-full">
         <tbody>
-          {transaction.entries.map((entry) => (
-            <tr
-              key={`${entry.account}-${entry.amount.currency}-${entry.amount.value}`}
-            >
-              <td className="w-full">
-                <TextLink href={`/application/accounts/${entry.account}`}>
-                  {entry.account}
-                </TextLink>
-              </td>
-              <td className="px-2 font-mono">{entry.amount.currency}</td>
-              <td className="text-right font-mono">{entry.amount.value}</td>
-            </tr>
-          ))}
+          {transaction.entries.map((entry) => {
+            const [symbol, formatted] = formatCurrency(
+              window.navigator.language,
+              entry.amount.currency,
+              entry.amount.value,
+              { decimalPlaces: 2 }
+            );
+
+            return (
+              <tr
+                key={`${entry.account}-${entry.amount.currency}-${entry.amount.value}`}
+              >
+                <td className="w-full">
+                  <TextLink href={`/application/accounts/${entry.account}`}>
+                    {entry.account}
+                  </TextLink>
+                </td>
+                <td className="px-2 text-right font-mono">{symbol}</td>
+                <td className="text-right font-mono">{formatted}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

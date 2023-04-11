@@ -1,10 +1,10 @@
 "use client";
 
+import formatCurrency from "@/currency/formatCurrency";
 import useMedia from "@/responsive/useMedia";
 import useApiClient from "@/src/api/useApiClient";
 import { accountKeys } from "@/src/ledger/queries";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useMemo } from "react";
 import {
   Bar,
   BarChart,
@@ -21,15 +21,6 @@ interface Props {
 }
 
 export default function MonthlyAccountBalance({ account }: Props) {
-  const numberFormatter = useMemo(
-    () =>
-      Intl.NumberFormat(navigator.language, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
-    []
-  );
-
   const client = useApiClient();
   const query = useQuery(
     accountKeys.balanceMonthly(account),
@@ -54,20 +45,23 @@ export default function MonthlyAccountBalance({ account }: Props) {
             continue;
           }
 
-          let parsedValue: number;
-          try {
-            parsedValue = parseFloat(usd.value);
-          } catch (e) {
+          const parsedValue = parseFloat(usd.value);
+          if (isNaN(parsedValue)) {
             continue;
           }
 
-          const displayValue = numberFormatter.format(parsedValue);
+          const formattedCurrency = formatCurrency(
+            window.navigator.language,
+            usd.currency,
+            parsedValue,
+            { decimalPlaces: 2 }
+          );
 
           months.push({
             month: parsedMonth,
             name: displayMonth,
             balance: parsedValue,
-            displayBalance: displayValue,
+            displayBalance: formattedCurrency.join(" "),
           });
         }
 
@@ -78,23 +72,16 @@ export default function MonthlyAccountBalance({ account }: Props) {
     }
   );
 
-  const tryFormatMoney = useCallback(
-    (value: string | number) => {
-      let parsed: number;
-      if (typeof value === "number") {
-        parsed = value;
-      } else {
-        try {
-          parsed = parseFloat(value);
-        } catch (e) {
-          return value;
-        }
-      }
+  const tryFormatMoney = (value: string | number) => {
+    const formattedCurrency = formatCurrency(
+      window.navigator.language,
+      "USD",
+      value,
+      { decimalPlaces: 2 }
+    );
 
-      return `$${numberFormatter.format(parsed)}`;
-    },
-    [numberFormatter]
-  );
+    return formattedCurrency.join("");
+  };
 
   const layout = useMedia<LayoutType>(
     [{ query: "(min-width: 1024px)", matchingValue: "horizontal" }],
