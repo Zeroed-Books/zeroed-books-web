@@ -1,17 +1,14 @@
 "use client";
 
 import formatCurrency from "@/currency/formatCurrency";
-import useApiClient from "@/src/api/useApiClient";
+import useApiClient from "@/components/api/useApiClient";
 import { accountKeys } from "@/src/ledger/queries";
 import { useQuery } from "@tanstack/react-query";
 
-interface Props {
-  account: string;
-}
-
-export default function AccountBalance({ account }: Props) {
+const useAccountBalance = (account: string) => {
   const client = useApiClient();
-  const query = useQuery(
+
+  return useQuery(
     accountKeys.balance(account),
     () => client.getAccountBalance(account),
     {
@@ -27,6 +24,14 @@ export default function AccountBalance({ account }: Props) {
         })),
     }
   );
+};
+
+interface Props {
+  account: string;
+}
+
+export default function AccountBalance({ account }: Props) {
+  const query = useAccountBalance(account);
 
   return (
     <div className="mb-4 bg-slate-100 p-4 text-slate-800 shadow">
@@ -34,9 +39,7 @@ export default function AccountBalance({ account }: Props) {
         <>
           <h3 className="mb-2 text-xl">Balance</h3>
           {query.data.map((amount) => (
-            <p key={amount.currency}>
-              {amount.formatted[0]}&nbsp;{amount.formatted[1]}
-            </p>
+            <p key={amount.currency}>{amount.formatted.join("")}</p>
           ))}
         </>
       ) : query.isLoading ? (

@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { transactionKeys } from "../queries";
 import { Transaction, ResourceCollection } from "@/src/api/reps";
-import useApiClient from "@/src/api/useApiClient";
+import useApiClient from "@/components/api/useApiClient";
 import NewTransactionList from "@/components/transactions/TransactionList";
 
 interface Props {

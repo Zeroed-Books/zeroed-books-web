@@ -1,7 +1,7 @@
 "use client";
 
 import { Transaction } from "@/src/api/reps";
-import useApiClient from "@/src/api/useApiClient";
+import useApiClient from "@/components/api/useApiClient";
 import { transactionKeys } from "@/src/ledger/queries";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
