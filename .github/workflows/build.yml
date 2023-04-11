@@ -5,7 +5,7 @@ on:
   workflow_call:
 
 env:
-  IMAGE_NAME: zeroed-books/web
+  IMAGE_NAME: ghcr.io/zeroed-books/web
 
 jobs:
   build:

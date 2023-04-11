@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: web
+  IMAGE_NAME: ghcr.io/zeroed-books/web
 
 jobs:
   build:
@@ -43,17 +43,13 @@ jobs:
 
       - name: Push image
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           VERSION=$(date +%s)-${{ github.sha }}
-          echo IMAGE_ID=$IMAGE_ID
+          echo IMAGE_NAME=$IMAGE_NAME
           echo VERSION=$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:latest
-          docker push $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:latest
+          docker tag $IMAGE_NAME $IMAGE_NAME:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:$VERSION
+          docker push $IMAGE_NAME:latest
 
       - name: Create Sentry release
         uses: getsentry/action-release@v1
