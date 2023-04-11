@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { transactionKeys } from "../../src/ledger/queries";
-import useApiClient from "@/src/api/useApiClient";
+import useApiClient from "@/components/api/useApiClient";
 import { ResourceCollection, Transaction } from "@/src/api/reps";
 
 interface Props {

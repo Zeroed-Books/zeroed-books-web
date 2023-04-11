@@ -61,5 +61,5 @@ export default function formatCurrency(
   const formatter = Intl.NumberFormat(locale, formatterOpts);
   const displayAmount = formatIfNumeric(formatter, amount);
 
-  return [CURRENCY_SYMBOLS[currency] ?? currency, displayAmount];
+  return [CURRENCY_SYMBOLS[currency] ?? `${currency} `, displayAmount];
 }

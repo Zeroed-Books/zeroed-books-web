@@ -1,6 +1,6 @@
 "use client";
 
-import useApiClient from "@/src/api/useApiClient";
+import useApiClient from "@/components/api/useApiClient";
 import { accountKeys } from "@/src/ledger/queries";
 import { useQuery } from "@tanstack/react-query";
 import TextLink from "../TextLink";

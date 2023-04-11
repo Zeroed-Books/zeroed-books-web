@@ -12,10 +12,10 @@ describe("formatCurrency", () => {
     expect(currencySymbol).toBe("$");
   });
 
-  it("should return the currency identifier if no symbol is available", () => {
+  it("should return the currency identifier with a trailing space if no symbol is available", () => {
     const [currencySymbol] = formatCurrency("en", "UNKNOWN", 1);
 
-    expect(currencySymbol).toBe("UNKNOWN");
+    expect(currencySymbol).toBe("UNKNOWN ");
   });
 
   it("should format currencies to the provided number of decimal places", () => {

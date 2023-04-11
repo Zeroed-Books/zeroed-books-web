@@ -22,7 +22,13 @@ export default defineConfig({
   test: {
     coverage: {
       all: true,
-      exclude: [".next/", "coverage/", "**/*.config.{js,ts}", ".*.{js,ts}"],
+      exclude: [
+        ".next/",
+        "coverage/",
+        "**/*.config.{js,ts}",
+        ".*.{js,ts}",
+        "**/*.test.{js,jsx,ts,tsx}",
+      ],
     },
     environment: "jsdom",
     setupFiles: ["vitest.setup.ts"],
