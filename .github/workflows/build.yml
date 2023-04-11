@@ -1,0 +1,35 @@
+name: Build Docker Image
+
+on:
+  pull_request:
+  workflow_call:
+
+env:
+  IMAGE_NAME: zeroed-books/web
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build image
+        run: >
+          docker build
+          --build-arg RELEASE_NAME=${{ github.sha }}
+          --file Dockerfile
+          --label "runnumber=${GITHUB_RUN_ID}"
+          --tag $IMAGE_NAME
+          .
+
+      - name: Export image
+        run: >
+          docker save $IMAGE_NAME
+          | gzip > /tmp/zeroed-books-web.tar.gz
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: zeroed-books-web
+          path: /tmp/zeroed-books-web.tar.gz

@@ -10,6 +10,8 @@ env:
   IMAGE_NAME: web
 
 jobs:
+  build:
+    uses: ./.github/workflows/build.yml
   review:
     uses: ./.github/workflows/review.yml
 
@@ -17,6 +19,7 @@ jobs:
   # See also https://docs.docker.com/docker-hub/builds/
   push:
     needs:
+      - build
       - review
 
     runs-on: ubuntu-latest
@@ -25,10 +28,14 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Download container artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: zeroed-books-web
+          path: /tmp
 
-      - name: Build image
-        run: docker build . --build-arg RELEASE_NAME=${{ github.sha }} --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+      - name: Load docker image
+        run: docker load < /tmp/zeroed-books-web.tar.gz
 
       - name: Log in to registry
         # This is where you will update the personal access token to GITHUB_TOKEN
