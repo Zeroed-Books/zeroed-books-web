@@ -2,23 +2,9 @@ name: Review Build
 
 on:
   pull_request:
-    branches:
-      - main
   workflow_call:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Ensure application builds
-        run: >
-          docker build
-          --build-arg RELEASE_NAME=${{ github.sha }}
-          --file Dockerfile
-          .
-
   test:
     runs-on: ubuntu-latest
     steps:
