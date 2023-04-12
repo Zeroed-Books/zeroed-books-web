@@ -1,6 +1,6 @@
 import AccountBalance from "@/components/accounts/AccountBalance";
 import AccountRunningBalanceChart from "@/components/accounts/AccountRunningBalanceChart";
-import MonthlyAccountBalance from "@/components/accounts/MonthlyAccountBalance";
+import AccountMonthlyBalance from "@/components/accounts/AccountMonthlyBalance";
 import TransactionList from "@/src/ledger/transactions/TransactionList";
 import React from "react";
 
@@ -36,7 +36,7 @@ export default function AccountDetailPage({ params }: Props) {
           {accountName.startsWith("Assets:") ? (
             <AccountRunningBalanceChart account={accountName} />
           ) : (
-            <MonthlyAccountBalance account={accountName} />
+            <AccountMonthlyBalance account={accountName} />
           )}
         </div>
       </div>
