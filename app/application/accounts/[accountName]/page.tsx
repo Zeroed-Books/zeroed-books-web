@@ -1,4 +1,5 @@
 import AccountBalance from "@/components/accounts/AccountBalance";
+import AccountRunningBalanceChart from "@/components/accounts/AccountRunningBalanceChart";
 import MonthlyAccountBalance from "@/components/accounts/MonthlyAccountBalance";
 import TransactionList from "@/src/ledger/transactions/TransactionList";
 import React from "react";
@@ -32,7 +33,11 @@ export default function AccountDetailPage({ params }: Props) {
       <div className="mb-4 lg:h-96">
         <h2 className="mb-4 text-2xl">Monthly Balance</h2>
         <div className="h-[28rem] lg:h-96">
-          <MonthlyAccountBalance account={accountName} />
+          {accountName.startsWith("Assets:") ? (
+            <AccountRunningBalanceChart account={accountName} />
+          ) : (
+            <MonthlyAccountBalance account={accountName} />
+          )}
         </div>
       </div>
       <h2 className="mb-4 text-2xl">Transactions</h2>

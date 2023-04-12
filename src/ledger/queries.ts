@@ -5,6 +5,8 @@ export const accountKeys = {
   balance: (name?: string) => [...accountKeys.balances(), name] as const,
   balanceMonthly: (name: string) =>
     [...accountKeys.all, "monthly-balances", name] as const,
+  balancePeriodic: (name: string) =>
+    [...accountKeys.all, "periodic-balance", name] as const,
   details: () => [...accountKeys.all, "details"] as const,
   detail: (name?: string) => [...accountKeys.details(), name] as const,
   popularAccounts: (search?: string) =>

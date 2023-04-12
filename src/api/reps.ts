@@ -3,25 +3,21 @@ export interface AccountBalance {
   value: string;
 }
 
-/**
- * Information about an authenticated user.
- */
-export interface AuthStatus {
-  /** The ID of the currently authenticated user. */
-  user_id: string;
+export type AccountPeriodicBalances = Record<string, CurrencyPeriodicBalances>;
+
+export interface Currency {
+  code: string;
+  minor_units: number;
 }
 
-/**
- * An email/password combination that identify a user.
- */
-export interface Credentials {
-  email: string;
-  password: string;
+export interface CurrencyPeriodicBalances {
+  currency: Currency;
+  balances: InstantBalance[];
 }
 
-export interface PasswordReset {
-  new_password: string;
-  token: string;
+export interface InstantBalance {
+  instant: string;
+  balance: string;
 }
 
 export interface ResourceCollection<T> {
