@@ -1,10 +1,8 @@
 import axios, { Axios, AxiosRequestConfig } from "axios";
 import {
   AccountBalance,
-  AuthStatus,
-  Credentials,
+  AccountPeriodicBalances,
   NewTransaction,
-  PasswordReset,
   ResourceCollection,
   Transaction,
   TransactionListParams,
@@ -63,6 +61,15 @@ class ApiClient {
     return response.data;
   }
 
+  public async getAccountBalancePeriodic(
+    account: string
+  ): Promise<AccountPeriodicBalances> {
+    const path = `${ApiClient.Paths.ACCOUNTS}/${account}/balance/periodic`;
+    const response = await this.client.get<AccountPeriodicBalances>(path);
+
+    return response.data;
+  }
+
   public async getActiveAccounts(): Promise<string[]> {
     const path = "/ledger/active-accounts";
     const response = await this.client.get<string[]>(path);
@@ -80,38 +87,6 @@ class ApiClient {
     const response = await this.client.get<string[]>(path, { params });
 
     return response.data;
-  }
-  //////////////////////////////////////////////////////////////////////////////
-  //                              Authentication                              //
-  //////////////////////////////////////////////////////////////////////////////
-
-  public async createCookieSession(credentials: Credentials): Promise<void> {
-    const url = `${ApiClient.Paths.AUTHENTICATION}/cookie-sessions`;
-
-    await this.client.post<void>(url, credentials);
-  }
-
-  public async getAuthStatus(): Promise<AuthStatus> {
-    const url = `${ApiClient.Paths.AUTHENTICATION}/me`;
-    const response = await this.client.get<AuthStatus>(url);
-
-    return response.data;
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  //                            Identities Services                           //
-  //////////////////////////////////////////////////////////////////////////////
-
-  public async createPasswordReset(request: PasswordReset): Promise<void> {
-    const path = `${ApiClient.Paths.IDENTITIES}/password-resets`;
-
-    await this.client.post<void>(path, request);
-  }
-
-  public async createPasswordResetRequest(email: string): Promise<void> {
-    const path = `${ApiClient.Paths.IDENTITIES}/password-reset-requests`;
-
-    await this.client.post<void>(path, { email });
   }
 
   //////////////////////////////////////////////////////////////////////////////
