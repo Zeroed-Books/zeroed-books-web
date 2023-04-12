@@ -1,3 +1,5 @@
+import { AccountBalanceReportInterval } from "../api/reps";
+
 export const accountKeys = {
   all: ["accounts"] as const,
   active: ["active-accounts"] as const,
@@ -5,8 +7,8 @@ export const accountKeys = {
   balance: (name?: string) => [...accountKeys.balances(), name] as const,
   balanceMonthly: (name: string) =>
     [...accountKeys.all, "monthly-balances", name] as const,
-  balancePeriodic: (name: string) =>
-    [...accountKeys.all, "periodic-balance", name] as const,
+  balancePeriodic: (name: string, interval: AccountBalanceReportInterval) =>
+    [...accountKeys.all, "periodic-balance", name, interval] as const,
   details: () => [...accountKeys.all, "details"] as const,
   detail: (name?: string) => [...accountKeys.details(), name] as const,
   popularAccounts: (search?: string) =>

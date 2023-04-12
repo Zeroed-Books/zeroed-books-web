@@ -3,6 +3,7 @@ import {
   AccountBalance,
   AccountPeriodicBalances,
   NewTransaction,
+  PeriodicAccountBalanceParams,
   ResourceCollection,
   Transaction,
   TransactionListParams,
@@ -62,10 +63,13 @@ class ApiClient {
   }
 
   public async getAccountBalancePeriodic(
-    account: string
+    account: string,
+    params?: PeriodicAccountBalanceParams
   ): Promise<AccountPeriodicBalances> {
     const path = `${ApiClient.Paths.ACCOUNTS}/${account}/balance/periodic`;
-    const response = await this.client.get<AccountPeriodicBalances>(path);
+    const response = await this.client.get<AccountPeriodicBalances>(path, {
+      params,
+    });
 
     return response.data;
   }
