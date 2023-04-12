@@ -30,15 +30,13 @@ export default function AccountDetailPage({ params }: Props) {
       <div className="lg:grid lg:grid-cols-3">
         <AccountBalance account={accountName} />
       </div>
-      <div className="mb-4 lg:h-96">
+      <div className="mb-4">
         <h2 className="mb-4 text-2xl">Monthly Balance</h2>
-        <div className="h-[28rem] lg:h-96">
-          {accountName.startsWith("Assets:") ? (
-            <AccountRunningBalanceChart account={accountName} />
-          ) : (
-            <AccountMonthlyBalance account={accountName} />
-          )}
-        </div>
+        {accountName.startsWith("Assets:") ? (
+          <AccountRunningBalanceChart account={accountName} />
+        ) : (
+          <AccountMonthlyBalance account={accountName} />
+        )}
       </div>
       <h2 className="mb-4 text-2xl">Transactions</h2>
       <TransactionList account={accountName} />
