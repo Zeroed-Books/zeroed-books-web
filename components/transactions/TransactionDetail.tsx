@@ -4,11 +4,11 @@ import { Transaction } from "@/src/api/reps";
 import useApiClient from "@/components/api/useApiClient";
 import { transactionKeys } from "@/src/ledger/queries";
 import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
 import TextLink from "@/components/TextLink";
 import DeleteTransactionButton from "./DeleteTransactionButton";
 import Breadcrumbs from "../Breadcrumbs";
 import formatCurrency from "@/currency/formatCurrency";
+import { format, parseISO } from "date-fns";
 
 interface TransactionDetailDisplayProps {
   transaction: Transaction;
@@ -17,7 +17,7 @@ interface TransactionDetailDisplayProps {
 const TransactionDetailDisplay = ({
   transaction,
 }: TransactionDetailDisplayProps) => {
-  const parsedDate = dayjs(transaction.date);
+  const parsedDate = parseISO(transaction.date);
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -36,7 +36,7 @@ const TransactionDetailDisplay = ({
         <div className="flex-grow">
           <h1 className="mb-2 text-xl md:text-3xl">{transaction.payee}</h1>
           <h2 className="mb-4 text-lg md:text-xl">
-            {parsedDate.format("MMMM D, YYYY")}
+            {format(parsedDate, "PP")}
           </h2>
         </div>
         <div>
