@@ -15,10 +15,23 @@ import {
   YAxis,
 } from "recharts";
 import { Currency } from "@/src/api/reps";
+import { asISODate } from "@/dates/formatters";
+import AccountBalanceTooltip from "./AccountBalanceTooltip";
 
 interface Props {
   account: string;
 }
+
+const tryFormatMoney = (currency: Currency) => (value: string | number) => {
+  const formattedCurrency = formatCurrency(
+    window.navigator.language,
+    currency.code,
+    value,
+    { decimalPlaces: currency.minor_units }
+  );
+
+  return formattedCurrency.join("");
+};
 
 export default function AccountRunningBalanceChart({ account }: Props) {
   const client = useApiClient();
@@ -38,11 +51,6 @@ export default function AccountRunningBalanceChart({ account }: Props) {
 
         for (const balance of usdData.balances) {
           const instant = new Date(balance.instant);
-          const displayInstant = [
-            instant.getUTCFullYear(),
-            instant.getUTCMonth() + 1,
-            instant.getUTCDate(),
-          ].join("-");
 
           const parsedBalance = parseFloat(balance.balance);
           if (isNaN(parsedBalance)) {
@@ -65,8 +73,7 @@ export default function AccountRunningBalanceChart({ account }: Props) {
           );
 
           balances.push({
-            instant,
-            name: displayInstant,
+            instant: instant.getTime(),
             balance: parsedBalance,
             displayBalance: formattedCurrency,
           });
@@ -81,17 +88,6 @@ export default function AccountRunningBalanceChart({ account }: Props) {
       },
     }
   );
-
-  const tryFormatMoney = (currency: Currency) => (value: string | number) => {
-    const formattedCurrency = formatCurrency(
-      window.navigator.language,
-      currency.code,
-      value,
-      { decimalPlaces: currency.minor_units }
-    );
-
-    return formattedCurrency.join("");
-  };
 
   if (query.data) {
     const largestDomainValue = Math.max(
@@ -110,13 +106,24 @@ export default function AccountRunningBalanceChart({ account }: Props) {
           margin={{ top: 5, right: 5, bottom: 5, left: leftMargin }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" type="category" />
+          <XAxis
+            dataKey="instant"
+            domain={["auto", "auto"]}
+            tickFormatter={(value) => asISODate(new Date(value))}
+            type="number"
+          />
           <YAxis
             name="Balance"
             tickFormatter={tryFormatMoney(query.data.currency)}
             type="number"
           />
-          <Tooltip formatter={tryFormatMoney(query.data.currency)} />
+          <Tooltip
+            content={
+              <AccountBalanceTooltip
+                moneyFormatter={tryFormatMoney(query.data.currency)}
+              />
+            }
+          />
           <Legend />
           <Line type="monotone" dataKey="balance" stroke="#82ca9d" />
         </LineChart>
