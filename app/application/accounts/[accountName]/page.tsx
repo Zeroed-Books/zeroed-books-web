@@ -33,7 +33,10 @@ export default function AccountDetailPage({ params }: Props) {
       <div className="mb-4">
         <h2 className="mb-4 text-2xl">Monthly Balance</h2>
         {accountName.startsWith("Assets:") ? (
-          <AccountRunningBalanceChart account={accountName} />
+          <AccountRunningBalanceChart
+            account={accountName}
+            interval="monthly"
+          />
         ) : (
           <AccountMonthlyBalance account={accountName} />
         )}

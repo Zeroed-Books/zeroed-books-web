@@ -4,7 +4,7 @@ import { accountKeys } from "@/src/ledger/queries";
 import useApiClient from "../api/useApiClient";
 import { useQuery } from "@tanstack/react-query";
 import formatCurrency from "@/currency/formatCurrency";
-import { Currency } from "@/src/api/reps";
+import { AccountBalanceReportInterval, Currency } from "@/src/api/reps";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -13,6 +13,7 @@ import {
   LinearScale,
   PointElement,
   TimeScale,
+  TimeScaleOptions,
   Tooltip,
   TooltipItem,
 } from "chart.js";
@@ -26,10 +27,6 @@ ChartJS.register(
   Tooltip
 );
 
-interface Props {
-  account: string;
-}
-
 const tryFormatMoney = (currency: Currency) => (value: string | number) => {
   const formattedCurrency = formatCurrency(
     window.navigator.language,
@@ -41,11 +38,32 @@ const tryFormatMoney = (currency: Currency) => (value: string | number) => {
   return formattedCurrency.join("");
 };
 
-export default function AccountRunningBalanceChart({ account }: Props) {
+const TIME_SCALE_OPTIONS: {
+  [k in AccountBalanceReportInterval]: Partial<TimeScaleOptions["time"]>;
+} = {
+  daily: {
+    tooltipFormat: "PP",
+    unit: "day",
+  },
+  monthly: {
+    tooltipFormat: "MMMM, yyyy",
+    unit: "month",
+  },
+};
+
+interface Props {
+  account: string;
+  interval: AccountBalanceReportInterval;
+}
+
+export default function AccountRunningBalanceChart({
+  account,
+  interval,
+}: Props) {
   const client = useApiClient();
   const query = useQuery(
-    accountKeys.balancePeriodic(account),
-    () => client.getAccountBalancePeriodic(account),
+    accountKeys.balancePeriodic(account, interval),
+    () => client.getAccountBalancePeriodic(account, { interval }),
     {
       select: (data) => {
         const usdData = data["USD"];
@@ -102,10 +120,7 @@ export default function AccountRunningBalanceChart({ account }: Props) {
       scales: {
         x: {
           type: "time" as const,
-          time: {
-            tooltipFormat: "PP",
-            unit: "day" as const,
-          },
+          time: TIME_SCALE_OPTIONS[interval],
         },
         y: {
           ticks: {
