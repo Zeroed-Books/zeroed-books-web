@@ -3,6 +3,7 @@ import AccountRunningBalanceChart from "@/components/accounts/AccountRunningBala
 import AccountMonthlyBalance from "@/components/accounts/AccountMonthlyBalance";
 import TransactionList from "@/src/ledger/transactions/TransactionList";
 import React from "react";
+import LinkedAccountName from "@/components/accounts/LinkedAccountName";
 
 interface Props {
   params: {
@@ -16,16 +17,7 @@ export default function AccountDetailPage({ params }: Props) {
   return (
     <div className="mx-auto max-w-4xl">
       <h1 className="mb-4 text-xl md:text-3xl">
-        {accountName.split(":").map((name, index) => (
-          <React.Fragment key={`${index}-${name}`}>
-            {index !== 0 && (
-              <>
-                :<wbr />
-              </>
-            )}
-            {name}
-          </React.Fragment>
-        ))}
+        <LinkedAccountName account={accountName} />
       </h1>
       <div className="lg:grid lg:grid-cols-3">
         <AccountBalance account={accountName} />
