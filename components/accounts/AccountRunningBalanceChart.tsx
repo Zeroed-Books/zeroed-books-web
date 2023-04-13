@@ -49,6 +49,10 @@ const TIME_SCALE_OPTIONS: {
     tooltipFormat: "MMMM, yyyy",
     unit: "month",
   },
+  weekly: {
+    tooltipFormat: "PP",
+    unit: "week",
+  },
 };
 
 interface Props {

@@ -3,7 +3,7 @@ export interface AccountBalance {
   value: string;
 }
 
-export type AccountBalanceReportInterval = "daily" | "monthly";
+export type AccountBalanceReportInterval = "daily" | "monthly" | "weekly";
 
 export type AccountPeriodicBalances = Record<string, CurrencyPeriodicBalances>;
 
