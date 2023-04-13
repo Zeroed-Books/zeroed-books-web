@@ -11,6 +11,7 @@ export default function sentryConfig() {
   return {
     dsn: env.SENTRY_DSN ?? "",
     environment,
+    release: env.SENTRY_RELEASE,
     tracesSampleRate: isProduction ? 0.05 : 1.0,
   };
 }
