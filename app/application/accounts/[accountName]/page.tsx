@@ -24,7 +24,7 @@ export default function AccountDetailPage({ params }: Props) {
       </div>
       <div className="mb-4">
         <h2 className="mb-4 text-2xl">Monthly Balance</h2>
-        {accountName.startsWith("Assets:") ? (
+        {accountName.startsWith("Assets:") || accountName === "Assets" ? (
           <AccountRunningBalanceChart account={accountName} interval="weekly" />
         ) : (
           <AccountMonthlyBalance account={accountName} />
