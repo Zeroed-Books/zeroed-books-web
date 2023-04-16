@@ -1,6 +1,6 @@
 export interface AccountBalance {
-  currency: string;
-  value: string;
+  currency: Currency;
+  value: number;
 }
 
 export type AccountBalanceReportInterval = "daily" | "monthly" | "weekly";
@@ -9,7 +9,7 @@ export type AccountPeriodicBalances = Record<string, CurrencyPeriodicBalances>;
 
 export interface Currency {
   code: string;
-  minor_units: number;
+  minorUnits: number;
 }
 
 export interface CurrencyPeriodicBalances {
@@ -19,7 +19,7 @@ export interface CurrencyPeriodicBalances {
 
 export interface InstantBalance {
   instant: string;
-  balance: string;
+  balance: number;
 }
 
 export interface ResourceCollection<T> {
@@ -30,7 +30,7 @@ export interface ResourceCollection<T> {
 export interface NewTransaction {
   date: string;
   payee: string;
-  notes: string;
+  notes?: string;
   entries: NewTransactionEntry[];
 }
 
@@ -38,7 +38,7 @@ export interface NewTransactionEntry {
   account: string;
   amount?: {
     currency: string;
-    value: string;
+    value: number;
   };
 }
 
@@ -59,8 +59,8 @@ export interface Transaction {
 export interface TransactionEntry {
   account: string;
   amount: {
-    currency: string;
-    value: string;
+    currency: Currency;
+    value: number;
   };
 }
 

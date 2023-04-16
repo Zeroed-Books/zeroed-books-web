@@ -21,7 +21,13 @@ const useTransactionForm = (transaction?: Transaction) => {
     defaultValues = {
       date: transaction.date,
       payee: transaction.payee,
-      entries: transaction.entries,
+      entries: transaction.entries.map((entry) => ({
+        ...entry,
+        amount: {
+          ...entry.amount,
+          currency: entry.amount.currency.code,
+        },
+      })),
     };
   } else {
     defaultValues = {
@@ -31,10 +37,6 @@ const useTransactionForm = (transaction?: Transaction) => {
         .fill(0)
         .map(() => ({
           account: "",
-          amount: {
-            currency: "USD",
-            value: "",
-          },
         })),
     };
   }

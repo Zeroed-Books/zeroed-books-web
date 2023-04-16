@@ -1,6 +1,6 @@
 import { Transaction } from "@/src/api/reps";
 import TextLink from "@/components/TextLink";
-import formatCurrency from "@/currency/formatCurrency";
+import { formatMinorCurrency } from "@/currency/format";
 
 interface Props {
   transactions: Transaction[];
@@ -29,11 +29,10 @@ export default function TransactionList({ transactions }: Props) {
               </td>
             </tr>
             {transaction.entries.map((entry) => {
-              const [symbol, formatted] = formatCurrency(
+              const [symbol, formatted] = formatMinorCurrency(
                 window.navigator.language,
                 entry.amount.currency,
-                entry.amount.value,
-                { decimalPlaces: 2 }
+                entry.amount.value
               );
 
               return (

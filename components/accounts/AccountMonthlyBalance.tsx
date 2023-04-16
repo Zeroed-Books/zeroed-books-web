@@ -1,7 +1,7 @@
 "use client";
 
 import "chartjs-adapter-date-fns";
-import formatCurrency from "@/currency/formatCurrency";
+import { formatCurrency } from "@/currency/format";
 import useApiClient from "@/components/api/useApiClient";
 import { accountKeys } from "@/src/ledger/queries";
 import { useQuery } from "@tanstack/react-query";
@@ -31,19 +31,19 @@ export default function AccountMonthlyBalance({ account }: Props) {
       select: (data) => {
         const parsedBalances = [];
         for (const [month, balances] of Object.entries(data)) {
-          const usd = balances.find((balance) => balance.currency === "USD");
+          const usd = balances.find(
+            (balance) => balance.currency.code === "USD"
+          );
           if (!usd) {
             continue;
           }
 
-          const parsedValue = parseFloat(usd.value);
-          if (isNaN(parsedValue)) {
-            continue;
-          }
+          const dollarAmount =
+            usd.value / Math.pow(10, usd.currency.minorUnits);
 
           parsedBalances.push({
             x: month,
-            y: parsedValue,
+            y: dollarAmount,
           });
         }
 
@@ -63,9 +63,8 @@ export default function AccountMonthlyBalance({ account }: Props) {
   const tryFormatMoney = (value: string | number) => {
     const formattedCurrency = formatCurrency(
       window.navigator.language,
-      "USD",
-      value,
-      { decimalPlaces: 2 }
+      { code: "USD", minorUnits: 2 },
+      value
     );
 
     return formattedCurrency.join("");

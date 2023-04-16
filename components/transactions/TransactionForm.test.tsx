@@ -53,7 +53,7 @@ describe("TransactionForm", () => {
           account: account1,
           amount: {
             currency: "USD",
-            value: amount1,
+            value: 2374,
           },
         },
         {

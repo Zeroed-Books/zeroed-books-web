@@ -5,7 +5,7 @@ import {
   TransactionValidationError,
 } from "@/src/api/reps";
 import React, { useCallback } from "react";
-import { Control, Controller, UseFormRegister } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import AccountNameInput from "../accounts/AccountNameInput";
 import {
   TransactionFormData,
@@ -13,21 +13,16 @@ import {
 } from "./useTransactionForm";
 import FormInput from "../forms/FormInput";
 import FormError from "../forms/FormError";
+import CurrencyInput from "../inputs/CurrencyInput";
 
 interface EntryFormProps {
   control: Control<TransactionFormData>;
   entry: NewTransactionEntry;
   index: number;
   loading: boolean;
-  register: UseFormRegister<TransactionFormData>;
 }
 
-const EntryForm: React.FC<EntryFormProps> = ({
-  control,
-  index,
-  loading,
-  register,
-}) => (
+const EntryForm: React.FC<EntryFormProps> = ({ control, index, loading }) => (
   <div className="mb-2 ml-4 inline-block md:inline-flex md:space-x-4">
     <Controller
       control={control}
@@ -41,12 +36,17 @@ const EntryForm: React.FC<EntryFormProps> = ({
         />
       )}
     />
-    <FormInput
-      disabled={loading}
-      label="Amount"
-      step="0.01"
-      type="number"
-      {...register(`entries.${index}.amount.value`)}
+    <Controller
+      control={control}
+      name={`entries.${index}.amount.value`}
+      render={({ field }) => (
+        <CurrencyInput
+          currency={{ code: "USD", minorUnits: 2 }}
+          disabled={loading}
+          label="Amount"
+          {...field}
+        />
+      )}
     />
   </div>
 );
@@ -70,17 +70,21 @@ export default function TransactionForm({ form, loading, onSubmit }: Props) {
         date: data.date,
         payee: data.payee,
         notes: "",
-        entries: data.entries
-          .filter((entry) => entry.account !== "")
-          .map((entry) => {
-            if (entry.amount?.value === "") {
-              return {
-                account: entry.account,
-              };
-            }
+        entries: data.entries.map((entry) => {
+          if (!entry.amount || !entry.amount.value) {
+            return {
+              account: entry.account,
+            };
+          }
 
-            return entry;
-          }),
+          return {
+            account: entry.account,
+            amount: {
+              currency: "USD",
+              value: entry.amount.value,
+            },
+          };
+        }),
       });
     },
     [onSubmit]
@@ -121,7 +125,6 @@ export default function TransactionForm({ form, loading, onSubmit }: Props) {
               entry={field}
               index={index}
               loading={loading}
-              register={form.register}
             />
           </li>
         ))}
