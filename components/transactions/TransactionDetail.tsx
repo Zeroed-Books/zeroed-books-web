@@ -7,8 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import TextLink from "@/components/TextLink";
 import DeleteTransactionButton from "./DeleteTransactionButton";
 import Breadcrumbs from "../Breadcrumbs";
-import formatCurrency from "@/currency/formatCurrency";
 import { format, parseISO } from "date-fns";
+import { formatMinorCurrency } from "@/currency/format";
 
 interface TransactionDetailDisplayProps {
   transaction: Transaction;
@@ -47,16 +47,15 @@ const TransactionDetailDisplay = ({
       <table className="w-full">
         <tbody>
           {transaction.entries.map((entry) => {
-            const [symbol, formatted] = formatCurrency(
+            const [symbol, formatted] = formatMinorCurrency(
               window.navigator.language,
               entry.amount.currency,
-              entry.amount.value,
-              { decimalPlaces: 2 }
+              entry.amount.value
             );
 
             return (
               <tr
-                key={`${entry.account}-${entry.amount.currency}-${entry.amount.value}`}
+                key={`${entry.account}-${entry.amount.currency.code}-${entry.amount.value}`}
               >
                 <td className="w-full">
                   <TextLink href={`/application/accounts/${entry.account}`}>

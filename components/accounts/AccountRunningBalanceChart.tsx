@@ -3,7 +3,7 @@
 import { accountKeys } from "@/src/ledger/queries";
 import useApiClient from "../api/useApiClient";
 import { useQuery } from "@tanstack/react-query";
-import formatCurrency from "@/currency/formatCurrency";
+import { formatCurrency } from "@/currency/format";
 import { AccountBalanceReportInterval, Currency } from "@/src/api/reps";
 import { Line } from "react-chartjs-2";
 import {
@@ -30,9 +30,8 @@ ChartJS.register(
 const tryFormatMoney = (currency: Currency) => (value: string | number) => {
   const formattedCurrency = formatCurrency(
     window.navigator.language,
-    currency.code,
-    value,
-    { decimalPlaces: currency.minor_units }
+    currency,
+    value
   );
 
   return formattedCurrency.join("");
@@ -77,14 +76,12 @@ export default function AccountRunningBalanceChart({
 
         const balances = [];
         for (const balance of usdData.balances) {
-          const parsedBalance = parseFloat(balance.balance);
-          if (isNaN(parsedBalance)) {
-            continue;
-          }
+          const dollarBalance =
+            balance.balance / Math.pow(10, usdData.currency.minorUnits);
 
           balances.push({
             x: balance.instant,
-            y: parsedBalance,
+            y: dollarBalance,
           });
         }
 

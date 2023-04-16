@@ -1,6 +1,4 @@
-interface CurrencyFormatOptions {
-  decimalPlaces: number;
-}
+import { Currency } from "@/src/api/reps";
 
 type FormattedCurrency = readonly [string, string];
 
@@ -37,29 +35,39 @@ const formatIfNumeric = (
  * Format a currency value for a specific locale.
  *
  * @param locale - The locale to use when formatting the value.
- * @param currency - The code for the currency being used.
+ * @param currency - The currency to format the amount as.
  * @param amount - The currency amount to format. If this is a string, it will
  * be parsed as a float first.
- * @param opts - Options to modify the format output.
  *
  * @returns A pair containing the symbol for the currency and the formatted
  * value. If no symbol is available for the currency, the currency code is used
  * instead. If the amount cannot be formatted as a number, it is returned as-is.
  */
-export default function formatCurrency(
+export function formatCurrency(
   locale: string,
-  currency: string,
-  amount: number | string,
-  opts?: CurrencyFormatOptions
+  currency: Currency,
+  amount: number | string
 ): FormattedCurrency {
-  const formatterOpts: Intl.NumberFormatOptions = {};
-  if (opts) {
-    formatterOpts.maximumFractionDigits = opts.decimalPlaces;
-    formatterOpts.minimumFractionDigits = opts.decimalPlaces;
-  }
+  const formatterOpts: Intl.NumberFormatOptions = {
+    maximumFractionDigits: currency.minorUnits,
+    minimumFractionDigits: currency.minorUnits,
+  };
 
   const formatter = Intl.NumberFormat(locale, formatterOpts);
   const displayAmount = formatIfNumeric(formatter, amount);
 
-  return [CURRENCY_SYMBOLS[currency] ?? `${currency} `, displayAmount];
+  return [
+    CURRENCY_SYMBOLS[currency.code] ?? `${currency.code} `,
+    displayAmount,
+  ];
+}
+
+export function formatMinorCurrency(
+  locale: string,
+  currency: Currency,
+  amount: number
+): FormattedCurrency {
+  const currencyAmount = amount / Math.pow(10, currency.minorUnits);
+
+  return formatCurrency(locale, currency, currencyAmount);
 }
