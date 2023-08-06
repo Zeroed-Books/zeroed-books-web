@@ -1,18 +1,6 @@
 import ExternalLink from "@/components/ExternalLink";
-import { UserProfile } from "@auth0/nextjs-auth0/client";
-import { cookies } from "next/headers";
+import { getSession } from "@auth0/nextjs-auth0";
 import { redirect } from "next/navigation";
-
-const getUser = async (): Promise<UserProfile | null> => {
-  const sessionCookie = cookies().get("appSession")?.value;
-  if (sessionCookie === undefined) return null;
-  const res = await fetch(`${process.env.AUTH0_BASE_URL}/api/auth/me`, {
-    headers: {
-      cookie: `appSession=${sessionCookie}`,
-    },
-  });
-  return await (res.status === 200 ? res.json() : null);
-};
 
 interface PageProps {
   searchParams: {
@@ -22,9 +10,9 @@ interface PageProps {
 
 export default async function HomePage({ searchParams }: PageProps) {
   const { noAuthRedirect } = searchParams;
-  const user = await getUser();
+  const session = await getSession();
 
-  if (user && !noAuthRedirect) {
+  if (session?.user && !noAuthRedirect) {
     redirect("/application");
   }
 

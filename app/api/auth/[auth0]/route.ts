@@ -5,7 +5,7 @@ const authorizationParams = {
   scope: "offline_access openid profile email",
 };
 
-export default handleAuth({
+export const GET = handleAuth({
   login: handleLogin({
     authorizationParams,
   }),

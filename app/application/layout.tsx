@@ -1,15 +1,9 @@
 import AppShell from "@/components/AppShell";
 import React from "react";
-import RequireAuth from "@/src/authentication/RequireAuth";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
-export default function MainLayout({
+export default withPageAuthRequired(async function MainLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <AppShell>
-      <RequireAuth>{children}</RequireAuth>
-    </AppShell>
-  );
-}
+}: any) {
+  return <AppShell>{children}</AppShell>;
+});
