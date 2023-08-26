@@ -9,21 +9,27 @@ const USD: Currency = {
   minorUnits: 2,
 };
 
+const runTest = async (
+  typed: string,
+  expectedValue: number | undefined,
+  expectedDisplay: string
+) => {
+  const handleChange = vitest.fn();
+  const user = userEvent.setup();
+
+  render(<CurrencyInput currency={USD} label="test" onChange={handleChange} />);
+
+  const input = screen.getByLabelText("test");
+
+  await user.clear(input);
+  await user.type(input, typed);
+  fireEvent.blur(input);
+
+  expect(handleChange).toHaveBeenLastCalledWith(expectedValue);
+  expect(input).toHaveValue(expectedDisplay);
+};
+
 describe("CurrencyInput", () => {
-  it("should return numeric values in the smallest currency amount", async () => {
-    const handleChange = vitest.fn();
-    const user = userEvent.setup();
-
-    render(
-      <CurrencyInput currency={USD} label="test" onChange={handleChange} />
-    );
-
-    const input = screen.getByLabelText("test");
-    await user.type(input, "5");
-
-    expect(handleChange).toHaveBeenLastCalledWith(500);
-  });
-
   it("should format the input on blur", async () => {
     const handleChange = vitest.fn();
     const user = userEvent.setup();
@@ -54,32 +60,24 @@ describe("CurrencyInput", () => {
     expect(input).toHaveValue("lizard");
   });
 
-  it("should be able to handle all these inputs", async () => {
-    const handleChange = vitest.fn();
-    const user = userEvent.setup();
+  describe("Parsing tests", () => {
+    it("should format thousands values", async () =>
+      await runTest("5432", 543200, "5,432.00"));
 
-    render(
-      <CurrencyInput currency={USD} label="test" onChange={handleChange} />
-    );
+    it("should handle bare decimal points", async () =>
+      await runTest(".2", 20, "0.20"));
 
-    const input = screen.getByLabelText("test");
+    it("should format values with decimal places", async () =>
+      await runTest("1234.56", 123456, "1,234.56"));
 
-    const runTest = async (
-      typed: string,
-      expectedValue: number | undefined,
-      expectedDisplay: string
-    ) => {
-      await user.clear(input);
-      await user.type(input, typed);
-      fireEvent.blur(input);
+    it("should not break for non-numeric values", async () =>
+      await runTest("lizard", undefined, "lizard"));
 
-      expect(handleChange).toHaveBeenLastCalledWith(expectedValue);
-      expect(input).toHaveValue(expectedDisplay);
-    };
+    it("should not pass through values with too many decimal places", async () =>
+      await runTest("123.456", undefined, "123.456"));
 
-    await runTest("5432", 543200, "5,432.00");
-    await runTest(".2", 20, "0.20");
-    await runTest("1234.56", 123456, "1,234.56");
-    await runTest("lizard", undefined, "lizard");
+    // Regression test for #243
+    it("should round minor units to integers", async () =>
+      await runTest("19.94", 1994, "19.94"));
   });
 });
