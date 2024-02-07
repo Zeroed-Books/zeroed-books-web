@@ -1,3 +1,7 @@
+*__Note:__ This project is not progressing and has been archived.*
+
+---
+
 # Zeroed Books Web
 
 [![GitHub workflow publish status](https://img.shields.io/github/actions/workflow/status/Zeroed-Books/zeroed-books-web/publish.yml?branch=main)](https://github.com/Zeroed-Books/zeroed-books-web/actions/workflows/publish.yml)
